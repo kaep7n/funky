@@ -31,7 +31,7 @@ namespace Funky.Core
 
             if (!Directory.Exists(fullPath))
             {
-                throw new ArgumentException("directory does not exist", nameof(path));
+                throw new ArgumentException("Directory does not exist", nameof(path));
             }
 
             this.loadContext = new DirectoryLoadContext(fullPath);
