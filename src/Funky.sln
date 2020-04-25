@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Messaging", "Funky.Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Messaging.Tests", "Funky.Messaging.Tests\Funky.Messaging.Tests.csproj", "{5DFB0EF3-21ED-433D-85DF-BC6F816177F6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DC2A396B-A6C2-456D-B3FE-DB13D47E9938}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".style", ".style", "{DC2A396B-A6C2-456D-B3FE-DB13D47E9938}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
