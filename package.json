@@ -1,0 +1,20 @@
+{
+  "name": "funky",
+  "description": "Funky is a system to setup and manage async functions",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaep7n/funky.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaep7n/funky/issues"
+  },
+  "private": true,
+  "homepage": "https://github.com/kaep7n/funky#readme",
+  "devDependencies": {
+    "semantic-release": "latest",
+    "@semantic-release/changelog": "latest",
+    "@semantic-release/git": "latest",
+    "@semantic-release/exec": "latest",
+    "@google/semantic-release-replace-plugin": "latest"
+  }
+}
