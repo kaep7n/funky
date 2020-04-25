@@ -1,0 +1,28 @@
+name: release
+
+on:
+  push:
+    branches:
+    - master
+    - beta
+    - alpha
+
+jobs:
+  release:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.200
+    - name: release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      run: |
+        npm install
+        npx semantic-release
