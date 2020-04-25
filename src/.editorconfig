@@ -221,3 +221,6 @@ dotnet_naming_style.upper_case_with_underscore.required_prefix =
 dotnet_naming_style.upper_case_with_underscore.required_suffix = 
 dotnet_naming_style.upper_case_with_underscore.word_separator = _
 dotnet_naming_style.upper_case_with_underscore.capitalization = all_upper
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = none
