@@ -1,0 +1,25 @@
+name: build
+
+on:
+  push:
+    branches:
+    - issue-*
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: restore
+      run: dotnet restore src/Funky.sln
+    - name: build
+      run: dotnet build src/Funky.sln --configuration Release --no-restore
+    - name: test
+      run: dotnet test src/Funky.sln --no-restore --verbosity normal
