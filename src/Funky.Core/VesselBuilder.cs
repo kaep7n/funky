@@ -13,9 +13,7 @@ namespace Funky.Core
         private Assembly assembly;
 
         public VesselBuilder()
-        {
-            this.Services.AddSingleton<IVessel, Vessel>();
-        }
+            => this.Services.AddSingleton<IVessel, Vessel>();
 
         public IServiceCollection Services { get; } = new ServiceCollection();
 
@@ -33,7 +31,7 @@ namespace Funky.Core
 
             if (!Directory.Exists(fullPath))
             {
-                throw new ArgumentException("Directory does not exist.", nameof(path));
+                throw new ArgumentException("directory does not exist", nameof(path));
             }
 
             this.loadContext = new DirectoryLoadContext(fullPath);
@@ -99,9 +97,7 @@ namespace Funky.Core
                 throw new TypeNotFoundException($"Type {startupTypeName} not found in assembly {this.assembly.FullName}");
             }
 
-            var instance = Activator.CreateInstance(type) as IStartup;
-
-            if(instance == null)
+            if (!(Activator.CreateInstance(type) is IStartup instance))
             {
                 throw new InvalidStartupException($"Type {type.FullName} does not implement interface");
             }

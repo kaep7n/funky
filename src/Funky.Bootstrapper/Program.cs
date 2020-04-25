@@ -1,25 +1,18 @@
-﻿using Funky.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.IO;
+﻿using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace Funky.Bootstrapper
 {
-    class Program
+    public static class Program
     {
-        static async Task Main(string[] args)
-        {
-            await CreateHostBuilder(args)
+        public static async Task Main(string[] args)
+            => await CreateHostBuilder(args)
                 .RunConsoleAsync()
                 .ConfigureAwait(false);
-        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .ConfigureServices((hostContext, services) =>
+            .ConfigureServices((_, __) =>
             {
                 // var dir = Path.GetFullPath("../../../../Funky.Tests/bin/Debug/netcoreapp3.1");
 
