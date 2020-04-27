@@ -10,6 +10,6 @@ namespace Funky.Messaging
     {
         Topic Topic { get; }
 
-        Task ForwardAsync(IMessage message);
+        Task ForwardAsync(Message message);
     }
 }

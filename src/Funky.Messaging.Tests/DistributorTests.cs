@@ -1,4 +1,5 @@
-﻿using Nito.AsyncEx;
+﻿using Funky.Core;
+using Nito.AsyncEx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,14 @@ namespace Funky.Messaging.Tests
 {
     public class DistributorTests
     {
+        /// <summary>
+        /// Should be possible to receive multiple types of messages
+        /// -> Enable
+        /// -> Disable (maybe for a specific amount of time)
+        /// -> ConfigurationChanged
+        /// -> ...
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task Test()
         {
@@ -19,52 +28,32 @@ namespace Funky.Messaging.Tests
             var consumer = new TestConsumer();
             var subscription = new ConsumerSubscription(topic, consumer);
 
-            var expectedMessage = new TestMessage(topic);
-
             var distributor = new Distributor();
             distributor.AddSubscription(subscription);
-
             await distributor.StartAsync();
-         
-            await distributor.EnqueueAsync(expectedMessage);
+
+            var producer = new JsonProducer(distributor);
+
+            await producer.ProduceAsync(topic, 1);
 
             await consumer.WaitForConsume();
 
             var acutalMessage = Assert.Single(consumer.ReceivedMessages);
 
-            Assert.Equal(acutalMessage, expectedMessage);
+            Assert.Equal(topic, acutalMessage.Topic);
 
             await distributor.StopAsync();
         }
     }
 
-    public class TestMessage : IMessage
-    {
-        public TestMessage(Topic topic)
-        {
-            this.CorrelationId = Guid.NewGuid();
-            this.Topic = topic;
-        }
-
-        public Guid CorrelationId { get; }
-
-        public Topic Topic { get; }
-    }
-
     public class TestConsumer : IConsumer
     {
         private readonly AsyncAutoResetEvent resetEvent = new AsyncAutoResetEvent(false);
-        private readonly Topic acceptedTopic = new TopicBuilder("test").Build();
-        private readonly List<IMessage> receivedMessages = new List<IMessage>();
+        private readonly List<Message> receivedMessages = new List<Message>();
 
-        public IEnumerable ReceivedMessages => this.receivedMessages;
+        public IEnumerable<Message> ReceivedMessages => this.receivedMessages;
 
-        public IEnumerable<Topic> GetAcceptedTopics()
-        {
-            yield return this.acceptedTopic;
-        }
-
-        public Task ConsumeAsync(IMessage message)
+        public Task ConsumeAsync(Message message)
         {
             this.receivedMessages.Add(message);
             this.resetEvent.Set();

@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Funky.Core\Funky.Core.csproj" />
     <ProjectReference Include="..\Funky.Messaging\Funky.Messaging.csproj" />
   </ItemGroup>
 

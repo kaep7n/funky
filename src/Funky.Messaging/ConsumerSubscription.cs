@@ -22,6 +22,6 @@ namespace Funky.Messaging
 
         public Topic Topic { get; }
 
-        public async Task ForwardAsync(IMessage message) => await this.consumer.ConsumeAsync(message);
+        public async Task ForwardAsync(Message message) => await this.consumer.ConsumeAsync(message);
     }
 }

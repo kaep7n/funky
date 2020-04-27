@@ -11,6 +11,6 @@ namespace Funky.Messaging
 
         void AddSubscription(ISubscription subscription);
 
-        Task EnqueueAsync(IMessage message, CancellationToken cancellationToken = default);
+        Task EnqueueAsync(Message message, CancellationToken cancellationToken = default);
     }
 }

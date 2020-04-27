@@ -9,7 +9,7 @@ namespace Funky.Messaging
 {
     public sealed class Distributor : IDistributor, IDisposable
     {
-        private readonly Channel<IMessage> channel = Channel.CreateUnbounded<IMessage>(
+        private readonly Channel<Message> channel = Channel.CreateUnbounded<Message>(
             new UnboundedChannelOptions
             {
                 SingleReader = true
@@ -50,7 +50,7 @@ namespace Funky.Messaging
             }
         }
 
-        public async Task EnqueueAsync(IMessage message, CancellationToken cancellationToken = default) => await this.channel.Writer.WriteAsync(message, cancellationToken);
+        public async Task EnqueueAsync(Message message, CancellationToken cancellationToken = default) => await this.channel.Writer.WriteAsync(message, cancellationToken);
 
         public void Dispose() => this.tokenSource.Dispose();
     }
