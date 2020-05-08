@@ -1,23 +1,25 @@
 using System;
 using System.Threading.Tasks;
-using Funky.Fakes;
 using Funky.Messaging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace Funky.Core.Tests
 {
+    [AcceptsTopic("/test")]
     public class VesselTestFunk : IFunk
     {
-        public Task DisableAsync() => Task.CompletedTask;
-        public Task EnableAsync() => Task.CompletedTask;
+        public bool WasExecuted { get; private set; }
+
+        public ValueTask ExecuteAsync()
+        {
+            this.WasExecuted = true;
+
+            return new ValueTask();
+        }
     }
 
     public class VesselTests
     {
-
         [Fact]
         public void Ctor_param_funk_should_throw_ArgumentNullException()
         {
@@ -38,21 +40,20 @@ namespace Funky.Core.Tests
         [Fact]
         public async Task ConsumeAsync_()
         {
-            var funk = new LoggingFunk(NullLogger<LoggingFunk>.Instance);
+            var funk = new VesselTestFunk();
             var vessel = new Vessel(funk);
 
             await vessel.StartAsync();
 
             var topic = TopicBuilder.Root("test").Build();
-            var payload = new JsonPayload(new LogEntry
-            {
-                Level = LogLevel.Information,
-                Message = "just a test"
-            });
+            var payload = new EmptyPayload();
+
             var message = new Message(topic, payload);
 
             await vessel.ConsumeAsync(message)
                 .ConfigureAwait(false);
+
+            Assert.True(funk.WasExecuted);
         }
     }
 }

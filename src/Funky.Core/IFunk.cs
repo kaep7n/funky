@@ -1,11 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using Funky.Messaging;
+using System.Threading.Tasks;
 
 namespace Funky.Core
 {
     public interface IFunk
     {
-        Task EnableAsync();
+        ValueTask ExecuteAsync();
+    }
 
-        Task DisableAsync();
+    public interface IFunk<TIn>
+    {
+        ValueTask ExecuteAsync(TIn input);
+    }
+
+    public interface IFunk<TIn, TOut>
+    {
+        ValueTask<TOut> ExecuteAsync(TIn input);
     }
 }

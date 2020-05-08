@@ -1,6 +1,4 @@
-﻿using Funky.Fakes;
-using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
+﻿using Nito.AsyncEx;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,13 +29,8 @@ namespace Funky.Messaging.Tests
             await distributor.StartAsync();
 
             var producer = new JsonProducer(distributor);
-            var logEntry = new LogEntry
-            {
-                Level = LogLevel.Information,
-                Message = "just a test"
-            };
             
-            await producer.ProduceAsync(topic, logEntry);
+            await producer.ProduceAsync(topic, 1);
 
             await consumer.WaitForConsume();
 

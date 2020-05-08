@@ -21,7 +21,7 @@ namespace Funky.Core.Tests
 
             var exception = Assert.Throws<ArgumentException>(() => new VesselBuilder().UseContentRoot(nonExistingDirectory));
 
-            Assert.Equal($"Directory does not exist. (Parameter 'path')", exception.Message);
+            Assert.Equal($"directory does not exist (Parameter 'path')", exception.Message);
         }
 
         [Fact]
@@ -49,21 +49,15 @@ namespace Funky.Core.Tests
         }
 
         [Fact]
-        public void Should_throw_FileNotFoundExceptionon_on_not_existing_assembly()
-        {
-            Assert.Throws<FileNotFoundException>(() => new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Assembly.Does.Not.Exist"));
-        }
+        public void Should_throw_FileNotFoundExceptionon_on_not_existing_assembly() => Assert.Throws<FileNotFoundException>(() => new VesselBuilder()
+                                                                                     .UseContentRoot("../../../Resources")
+                                                                                     .UseAssembly("Assembly.Does.Not.Exist"));
 
         [Fact]
-        public void Should_throw_TypeNotFoundException_on_not_existing_type()
-        {
-            Assert.Throws<TypeNotFoundException>(() => new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Type.Does.Not.Exist"));
-        }
+        public void Should_throw_TypeNotFoundException_on_not_existing_type() => Assert.Throws<TypeNotFoundException>(() => new VesselBuilder()
+                                                                               .UseContentRoot("../../../Resources")
+                                                                               .UseAssembly("Funky.Fakes")
+                                                                               .UseFunk("Type.Does.Not.Exist"));
 
         [Fact]
         public void Should_throw_ArgumentException_on_type_that_does_not_implemented_IFunk()
@@ -78,15 +72,12 @@ namespace Funky.Core.Tests
         }
 
         [Fact]
-        public void Should_throw_InvalidStartupException_()
-        {
-            Assert.Throws<InvalidStartupException>(() => new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.EmptyFunk")
-            .UseStartup("Funky.Fakes.NoStartup")
-            .Build());
-        }
+        public void Should_throw_InvalidStartupException_() => Assert.Throws<InvalidStartupException>(() => new VesselBuilder()
+                                                             .UseContentRoot("../../../Resources")
+                                                             .UseAssembly("Funky.Fakes")
+                                                             .UseFunk("Funky.Fakes.EmptyFunk")
+                                                             .UseStartup("Funky.Fakes.NoStartup")
+                                                             .Build());
 
         [Fact]
         public void Should_create_vessel_on_build()

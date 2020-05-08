@@ -2,6 +2,7 @@
 
 namespace Funky.Messaging
 {
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class AcceptsTopicAttribute : Attribute
     {
         public AcceptsTopicAttribute(string topic)

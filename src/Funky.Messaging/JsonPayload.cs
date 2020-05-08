@@ -6,10 +6,10 @@ namespace Funky.Messaging
     {
         private readonly object value;
 
-        public JsonPayload(object value) => this.value = value ?? throw new System.ArgumentNullException(nameof(value));
+        private JsonPayload() { }
 
-        public object GetData() => this.value;
+        public JsonPayload(object value) => this.value = value ?? throw new ArgumentNullException(nameof(value));
 
-        public Type GetDataType() => this.value.GetType();
+        public object Get() => this.value;
     }
 }
