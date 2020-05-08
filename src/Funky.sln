@@ -20,6 +20,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".style", ".style", "{DC2A39
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{D958265E-96AA-456F-AD93-3AE9B46F00C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.sh = ..\build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".publish", ".publish", "{9D1E1FB7-0BCE-42D2-807E-50737C791A10}"
+	ProjectSection(SolutionItems) = preProject
+		..\publish.sh = ..\publish.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{8680541B-1980-419D-BBD8-728E8C4AEDB2}"
+	ProjectSection(SolutionItems) = preProject
+		..\package.json = ..\package.json
+		..\release.config.js = ..\release.config.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{64F5B212-D602-4E99-89AA-DC9469771772}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B72A0924-ADF4-4CEF-86C9-E9E2A43D44D7}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +77,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B72A0924-ADF4-4CEF-86C9-E9E2A43D44D7} = {64F5B212-D602-4E99-89AA-DC9469771772}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B3BF6A1-5C1D-43BF-B441-B4A69CECAC31}
