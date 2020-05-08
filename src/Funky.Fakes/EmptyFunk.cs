@@ -5,6 +5,6 @@ namespace Funky.Fakes
 {
     public class EmptyFunk : IFunk
     {
-        public ValueTask ExecuteAsync() => new ValueTask();
+        public ValueTask ExecuteAsync(object _) => new ValueTask();
     }
 }

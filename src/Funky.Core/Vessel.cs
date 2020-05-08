@@ -42,7 +42,7 @@ namespace Funky.Core
                 return;
             }
 
-            await this.funk.ExecuteAsync()
+            await this.funk.ExecuteAsync(message.Payload.Get())
                 .ConfigureAwait(false);
         }
     }

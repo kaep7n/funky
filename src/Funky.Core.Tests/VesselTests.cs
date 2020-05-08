@@ -10,7 +10,7 @@ namespace Funky.Core.Tests
     {
         public bool WasExecuted { get; private set; }
 
-        public ValueTask ExecuteAsync()
+        public ValueTask ExecuteAsync(object _)
         {
             this.WasExecuted = true;
 
@@ -38,7 +38,7 @@ namespace Funky.Core.Tests
         }
 
         [Fact]
-        public async Task ConsumeAsync_()
+        public async Task ConsumeAsync_should_execute_funk()
         {
             var funk = new VesselTestFunk();
             var vessel = new Vessel(funk);

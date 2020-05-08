@@ -11,7 +11,7 @@ namespace Funky.Fakes
 
         public LoggingFunk(ILogger<LoggingFunk> logger) => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public ValueTask ExecuteAsync()
+        public ValueTask ExecuteAsync(object _)
         {
             this.logger.LogInformation("loggging works!");
             return new ValueTask();
