@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Funky.Messaging
 {
     public class TopicBuilder
     {
-        private static char[] validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=".ToCharArray();
+        private static readonly char[] validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=".ToCharArray();
 
         private readonly List<string> fragments = new List<string>();
 
-        public TopicBuilder(string root)
+        private TopicBuilder(string root)
         {
             ValidateAndThrow(root);
 
             this.fragments.Add(root);
         }
+
+        public static TopicBuilder Root(string root) => new TopicBuilder(root);
 
         public TopicBuilder With(string fragment)
         {

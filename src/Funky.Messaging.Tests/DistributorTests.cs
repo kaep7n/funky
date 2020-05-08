@@ -1,9 +1,7 @@
-﻿using Funky.Core;
+﻿using Funky.Fakes;
+using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -23,9 +21,9 @@ namespace Funky.Messaging.Tests
         [Fact]
         public async Task Test()
         {
-            var topic = new TopicBuilder("test").Build();
+            var topic = TopicBuilder.Root("test").Build();
 
-            var consumer = new TestConsumer();
+            var consumer = new LogMessageConsumer();
             var subscription = new ConsumerSubscription(topic, consumer);
 
             var distributor = new Distributor();
@@ -33,8 +31,13 @@ namespace Funky.Messaging.Tests
             await distributor.StartAsync();
 
             var producer = new JsonProducer(distributor);
-
-            await producer.ProduceAsync(topic, 1);
+            var logEntry = new LogEntry
+            {
+                Level = LogLevel.Information,
+                Message = "just a test"
+            };
+            
+            await producer.ProduceAsync(topic, logEntry);
 
             await consumer.WaitForConsume();
 
@@ -46,7 +49,7 @@ namespace Funky.Messaging.Tests
         }
     }
 
-    public class TestConsumer : IConsumer
+    public class LogMessageConsumer : IConsumer
     {
         private readonly AsyncAutoResetEvent resetEvent = new AsyncAutoResetEvent(false);
         private readonly List<Message> receivedMessages = new List<Message>();

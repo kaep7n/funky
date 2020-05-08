@@ -1,6 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using Funky.Fakes;
+using Funky.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace Funky.Core.Tests
@@ -13,19 +17,11 @@ namespace Funky.Core.Tests
 
     public class VesselTests
     {
-        [Fact]
-        public void Ctor_param_serviceProvider_should_throw_ArgumentNullException()
-        {
-            var exception = Assert.Throws<ArgumentNullException>(() => new Vessel(null, null));
-
-            Assert.Equal($"Value cannot be null. (Parameter 'serviceProvider')", exception.Message);
-        }
 
         [Fact]
         public void Ctor_param_funk_should_throw_ArgumentNullException()
         {
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
-            var exception = Assert.Throws<ArgumentNullException>(() => new Vessel(serviceProvider, null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new Vessel(null));
 
             Assert.Equal($"Value cannot be null. (Parameter 'funk')", exception.Message);
         }
@@ -33,11 +29,30 @@ namespace Funky.Core.Tests
         [Fact]
         public void Ctor_should_create_instance()
         {
-            var serviceProvider = new ServiceCollection().BuildServiceProvider();
             var funk = new VesselTestFunk();
-            var vessel = new Vessel(serviceProvider, funk);
+            var vessel = new Vessel(funk);
 
             Assert.NotNull(vessel);
+        }
+
+        [Fact]
+        public async Task ConsumeAsync_()
+        {
+            var funk = new LoggingFunk(NullLogger<LoggingFunk>.Instance);
+            var vessel = new Vessel(funk);
+
+            await vessel.StartAsync();
+
+            var topic = TopicBuilder.Root("test").Build();
+            var payload = new JsonPayload(new LogEntry
+            {
+                Level = LogLevel.Information,
+                Message = "just a test"
+            });
+            var message = new Message(topic, payload);
+
+            await vessel.ConsumeAsync(message)
+                .ConfigureAwait(false);
         }
     }
 }
