@@ -1,11 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Funky.Messaging;
 using Xunit;
 
 namespace Funky.Core.Tests
 {
-    [AcceptsTopic("/test")]
     public class VesselTestFunk : IFunk
     {
         public bool WasExecuted { get; private set; }
@@ -35,25 +33,6 @@ namespace Funky.Core.Tests
             var vessel = new Vessel(funk);
 
             Assert.NotNull(vessel);
-        }
-
-        [Fact]
-        public async Task ConsumeAsync_should_execute_funk()
-        {
-            var funk = new VesselTestFunk();
-            var vessel = new Vessel(funk);
-
-            await vessel.StartAsync();
-
-            var topic = TopicBuilder.Root("test").Build();
-            var payload = new EmptyPayload();
-
-            var message = new Message(topic, payload);
-
-            await vessel.ConsumeAsync(message)
-                .ConfigureAwait(false);
-
-            Assert.True(funk.WasExecuted);
         }
     }
 }

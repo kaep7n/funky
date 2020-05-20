@@ -22,8 +22,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Funky.Messaging\Funky.Messaging.csproj" />
-  </ItemGroup>
-
 </Project>
