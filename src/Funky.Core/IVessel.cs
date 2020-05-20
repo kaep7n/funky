@@ -5,8 +5,8 @@ namespace Funky.Core
 {
     public interface IVessel
     {
-        Task StartAsync();
+        ValueTask StartAsync();
 
-        Task StopAsync();
+        ValueTask StopAsync();
     }
 }
