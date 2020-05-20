@@ -1,3 +1,10 @@
+# [1.0.0-alpha.2](https://github.com/kaep7n/funky/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2020-05-20)
+
+
+### Features
+
+* basic messaging ([#5](https://github.com/kaep7n/funky/issues/5)) ([96924c6](https://github.com/kaep7n/funky/commit/96924c6e62979262ef8687cdcabc77b432085b9a))
+
 # 1.0.0-alpha.1 (2020-04-25)
 
 
