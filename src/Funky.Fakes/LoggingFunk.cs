@@ -9,18 +9,12 @@ namespace Funky.Fakes
     {
         private readonly ILogger<LoggingFunk> logger;
 
-        public LoggingFunk(ILogger<LoggingFunk> logger)
+        public LoggingFunk(ILogger<LoggingFunk> logger) => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        public ValueTask ExecuteAsync(object _)
         {
-            if (logger is null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
-
-            this.logger = logger;
+            this.logger.LogInformation("loggging works!");
+            return new ValueTask();
         }
-
-        public Task DisableAsync() => Task.CompletedTask;
-
-        public Task EnableAsync() => Task.CompletedTask;
     }
 }
