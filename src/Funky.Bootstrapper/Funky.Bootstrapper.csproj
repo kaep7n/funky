@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+	<LangVersion>preview</LangVersion>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>1.0.0-alpha.1</Version>
     <RepositoryUrl>https://github.com/kaep7n/funky</RepositoryUrl>
