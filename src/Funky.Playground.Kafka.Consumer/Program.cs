@@ -1,55 +1,69 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
+using Console = Colorful.Console;
 
 namespace Funky.Playground.Kafka.Consumer
 {
     class Program
     {
-        public static void Main(string[] args)
+        private static readonly string[] brokers = new[] { "localhost:9092", "localhost:9093", "localhost:9094" };
+
+        public static void Main(string[] _)
         {
-            var conf = new ConsumerConfig
+            var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, e) =>
+            {
+                e.Cancel = true; // prevent the process from terminating.
+                cts.Cancel();
+            };
+
+            var config = new ConsumerConfig
             {
                 GroupId = "test-consumer-group",
-                BootstrapServers = "localhost:9092",
-                // Note: The AutoOffsetReset property determines the start offset in the event
-                // there are not yet any committed offsets for the consumer group for the
-                // topic/partitions of interest. By default, offsets are committed
-                // automatically, so in this example, consumption will only start from the
-                // earliest message in the topic 'my-topic' the first time you run the program.
+                BootstrapServers = string.Join(",", brokers),
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            using (var c = new ConsumerBuilder<Ignore, string>(conf).Build())
+            Console.WriteLine("consumer started", Color.Gray);
+
+            Task.Run(() => StartConsumer(config, cts.Token, 1));
+            Task.Run(() => StartConsumer(config, cts.Token, 2));
+            Task.Run(() => StartConsumer(config, cts.Token, 3));
+
+            Console.WriteLine("waiting for messages", Color.Gray);
+
+            Console.ReadLine();
+        }
+
+        private static void StartConsumer(ConsumerConfig config, CancellationToken token, int number)
+        {
+            var c = new ConsumerBuilder<Ignore, string>(config).Build();
+            c.Subscribe("test-topic");
+
+            Console.WriteLine($"{number}: subscribed", Color.YellowGreen);
+
+            try
             {
-                c.Subscribe("test-topic");
-
-                var cts = new CancellationTokenSource();
-                Console.CancelKeyPress += (_, e) => {
-                    e.Cancel = true; // prevent the process from terminating.
-                    cts.Cancel();
-                };
-
-                try
+                while (true)
                 {
-                    while (true)
+                    try
                     {
-                        try
-                        {
-                            var cr = c.Consume(cts.Token);
-                            Console.WriteLine($"Consumed message '{cr.Message.Value}' at: '{cr.TopicPartitionOffset}'.");
-                        }
-                        catch (ConsumeException e)
-                        {
-                            Console.WriteLine($"Error occured: {e.Error.Reason}");
-                        }
+                        var cr = c.Consume(token);
+                        Console.WriteLine($"{number} | consumed message '{cr.Message.Value}' at: '{cr.TopicPartitionOffset}'.", Color.YellowGreen);
+                    }
+                    catch (ConsumeException e)
+                    {
+                        Console.WriteLine($"{number} | error occured: {e.Error.Reason}", Color.Red);
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    // Ensure the consumer leaves the group cleanly and final offsets are committed.
-                    c.Close();
-                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Ensure the consumer leaves the group cleanly and final offsets are committed.
+                c.Close();
             }
         }
     }

@@ -1,63 +1,93 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Drawing;
 using System.Threading.Tasks;
+using Console = Colorful.Console;
 
 namespace Funky.Playground.Kafka.Producer
 {
     class Program
     {
-        public static async Task Main(string[] args)
+        private static readonly string[] brokers = new[] { "localhost:9092", "localhost:9093", "localhost:9094" };
+
+        public static async Task Main(string[] _)
         {
+            Console.WriteLine("producer started", Color.Gray);
+            
             var input = string.Empty;
 
             while (input != "exit")
             {
-                await AwaitDelivery();
+                Console.WriteLine("send a single message by entering 's' or 'single'", Color.White);
+                Console.WriteLine("send multiple messages by typing 'm' or 'multiple'", Color.White);
 
                 input = Console.ReadLine();
+
+                if (input == "s" || input == "single")
+                {
+                    Console.WriteLine($"sending 1 message", Color.Gray);
+
+                    await SendSingleMessage();
+                }
+                else if (input == "m" || input == "multiple")
+                {
+                    Console.WriteLine("you choosed to send multiple messages enter a count", Color.White);
+
+                    if (int.TryParse(Console.ReadLine(), out var count) && count > 0)
+                    {
+                        Console.WriteLine($"sending {count} messages", Color.Gray);
+                        SendMultipleMessages(count);
+                    }
+                    else
+                    {
+                        Console.WriteLine("invalid input, starting over", Color.LightYellow);
+                    }
+                }
             }
         }
 
-        private static async Task AwaitDelivery()
+        private static async Task SendSingleMessage()
         {
-            var config = new ProducerConfig { BootstrapServers = "localhost:9092" };
+            var config = new ProducerConfig { BootstrapServers = string.Join(",", brokers) };
 
-            // If serializers are not specified, default serializers from
-            // `Confluent.Kafka.Serializers` will be automatically used where
-            // available. Note: by default strings are encoded as UTF8.
-            using (var p = new ProducerBuilder<Null, string>(config).Build())
+            using var producer = new ProducerBuilder<Null, string>(config).Build();
+            
+            try
             {
-                try
-                {
-                    var dr = await p.ProduceAsync("test-topic", new Message<Null, string> { Value = "test" });
-                    Console.WriteLine($"Delivered '{dr.Value}' to '{dr.TopicPartitionOffset}'");
-                }
-                catch (ProduceException<Null, string> e)
-                {
-                    Console.WriteLine($"Delivery failed: {e.Error.Reason}");
-                }
+                var delivery = await producer.ProduceAsync("test-topic", new Message<Null, string> { Value = "test" });
+                Console.WriteLine($"Delivered '{delivery.Value}' to '{delivery.TopicPartitionOffset}'", Color.LightGreen);
+            }
+            catch (ProduceException<Null, string> produceException)
+            {
+                Console.WriteLine($"Delivery failed: {produceException.Error.Reason}", Color.Red);
             }
         }
 
-        private static void FlushDelivery(string[] args)
+        private static void SendMultipleMessages(int count)
         {
-            var conf = new ProducerConfig { BootstrapServers = "localhost:9092" };
+            var config = new ProducerConfig { BootstrapServers = string.Join(",", brokers) };
 
-            Action<DeliveryReport<Null, string>> handler = r =>
-                Console.WriteLine(!r.Error.IsError
-                    ? $"Delivered message to {r.TopicPartitionOffset}"
-                    : $"Delivery Error: {r.Error.Reason}");
-
-            using (var p = new ProducerBuilder<Null, string>(conf).Build())
+            static void handler(DeliveryReport<Null, string> deliveryReport)
             {
-                for (int i = 0; i < 100; ++i)
+                if (deliveryReport.Error.IsError)
                 {
-                    p.Produce("my-topic", new Message<Null, string> { Value = i.ToString() }, handler);
+                    Console.WriteLine($"Delivery failed: {deliveryReport.Error.Reason}", Color.Red);
                 }
-
-                // wait for up to 10 seconds for any inflight messages to be delivered.
-                p.Flush(TimeSpan.FromSeconds(10));
+                else
+                {
+                    Console.WriteLine($"Delivered '{deliveryReport.Value}' to '{deliveryReport.TopicPartitionOffset}'", Color.LightGreen);
+                }
             }
+
+            using var producer = new ProducerBuilder<Null, string>(config).Build();
+            
+            for (var i = 0; i < count; ++i)
+            {
+                producer.Produce("test-topic", new Message<Null, string> { Value = i.ToString() }, handler);
+            }
+
+            // wait for up to 10 seconds for any inflight messages to be delivered.
+            producer.Flush(TimeSpan.FromSeconds(10));
         }
     }
 }
