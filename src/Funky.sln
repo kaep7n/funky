@@ -20,6 +20,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".style", ".style", "{DC2A39
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "playground", "playground", "{D77A2B56-3FAE-4E0E-B238-C890E69A33B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Playground.Kafka.Producer", "Funky.Playground.Kafka.Producer\Funky.Playground.Kafka.Producer.csproj", "{90A58FF2-51A5-49E0-8C1A-AA736108E807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Playground.Kafka.Consumer", "Funky.Playground.Kafka.Consumer\Funky.Playground.Kafka.Consumer.csproj", "{767B1F6D-BEF2-4E58-8F44-5D268207E523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{4A9C9C34-D8E1-4063-9E80-E5BC9267E056}"
+	ProjectSection(SolutionItems) = preProject
+		..\package.json = ..\package.json
+		..\publish.sh = ..\publish.sh
+		..\release.config.js = ..\release.config.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{98521FB7-4A54-409A-B67B-A00226918B5B}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.sh = ..\build.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{B271805B-C104-439E-A9DB-8514EF04C455}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C5C1E4E9-636E-46FF-BEC9-5A1FE377B03C}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
+		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,9 +76,23 @@ Global
 		{5DFB0EF3-21ED-433D-85DF-BC6F816177F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DFB0EF3-21ED-433D-85DF-BC6F816177F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DFB0EF3-21ED-433D-85DF-BC6F816177F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807} = {D77A2B56-3FAE-4E0E-B238-C890E69A33B4}
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523} = {D77A2B56-3FAE-4E0E-B238-C890E69A33B4}
+		{B271805B-C104-439E-A9DB-8514EF04C455} = {4A9C9C34-D8E1-4063-9E80-E5BC9267E056}
+		{C5C1E4E9-636E-46FF-BEC9-5A1FE377B03C} = {B271805B-C104-439E-A9DB-8514EF04C455}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B3BF6A1-5C1D-43BF-B441-B4A69CECAC31}
