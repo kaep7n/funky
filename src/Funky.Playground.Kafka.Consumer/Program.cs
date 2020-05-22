@@ -29,14 +29,39 @@ namespace Funky.Playground.Kafka.Consumer
             };
 
             Console.WriteLine("consumer started", Color.Gray);
+            
+            var cts1 = new CancellationTokenSource();
+            Task.Run(() => StartConsumer(config, cts1.Token, 1));
 
-            Task.Run(() => StartConsumer(config, cts.Token, 1));
-            Task.Run(() => StartConsumer(config, cts.Token, 2));
-            Task.Run(() => StartConsumer(config, cts.Token, 3));
+            var cts2 = new CancellationTokenSource();
+            Task.Run(() => StartConsumer(config, cts2.Token, 2));
+
+            var cts3 = new CancellationTokenSource();
+            Task.Run(() => StartConsumer(config, cts3.Token, 3));
 
             Console.WriteLine("waiting for messages", Color.Gray);
 
-            Console.ReadLine();
+            var input = string.Empty;
+
+            while (input != "exit")
+            {
+                input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1": 
+                        cts1.Cancel();
+                        break;
+                    case "2":
+                        cts2.Cancel();
+                        break;
+                    case "3":
+                        cts3.Cancel();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private static void StartConsumer(ConsumerConfig config, CancellationToken token, int number)
@@ -51,7 +76,7 @@ namespace Funky.Playground.Kafka.Consumer
 
             try
             {
-                while (true)
+                while (!token.IsCancellationRequested)
                 {
                     try
                     {
