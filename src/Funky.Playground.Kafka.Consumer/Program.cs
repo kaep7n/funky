@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using System;
 using System.Drawing;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Console = Colorful.Console;
@@ -22,7 +23,7 @@ namespace Funky.Playground.Kafka.Consumer
 
             var config = new ConsumerConfig
             {
-                GroupId = "test-consumer-group",
+                GroupId = "configuration-group",
                 BootstrapServers = string.Join(",", brokers),
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
@@ -40,8 +41,11 @@ namespace Funky.Playground.Kafka.Consumer
 
         private static void StartConsumer(ConsumerConfig config, CancellationToken token, int number)
         {
-            var c = new ConsumerBuilder<Ignore, string>(config).Build();
-            c.Subscribe("test-topic");
+            var consumer = new ConsumerBuilder<string, ConfigurationChanged>(config)
+                .SetKeyDeserializer(Deserializers.Utf8)
+                .SetValueDeserializer(new JsonDeserializer<ConfigurationChanged>())
+                .Build();
+            consumer.Subscribe(ConfigurationChanged.TOPIC);
 
             Console.WriteLine($"{number}: subscribed", Color.YellowGreen);
 
@@ -51,8 +55,8 @@ namespace Funky.Playground.Kafka.Consumer
                 {
                     try
                     {
-                        var cr = c.Consume(token);
-                        Console.WriteLine($"{number} | consumed message '{cr.Message.Value}' at: '{cr.TopicPartitionOffset}'.", Color.YellowGreen);
+                        var consumeResult = consumer.Consume(token);
+                        Console.WriteLine($"{number} | consumed message '{consumeResult.Message.Value.Configuration}' {consumeResult.Message.Value.ChangedAtUtc} at: '{consumeResult.TopicPartitionOffset}'.", Color.YellowGreen);
                     }
                     catch (ConsumeException e)
                     {
@@ -63,8 +67,13 @@ namespace Funky.Playground.Kafka.Consumer
             catch (OperationCanceledException)
             {
                 // Ensure the consumer leaves the group cleanly and final offsets are committed.
-                c.Close();
+                consumer.Close();
             }
         }
+    }
+
+    public class JsonDeserializer<T> : IDeserializer<T>
+    {
+        public T Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context) => JsonSerializer.Deserialize<T>(data);
     }
 }

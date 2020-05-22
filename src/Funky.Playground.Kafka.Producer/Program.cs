@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using System;
 using System.Drawing;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Console = Colorful.Console;
 
@@ -10,7 +11,7 @@ namespace Funky.Playground.Kafka.Producer
     {
         private static readonly string[] brokers = new[] { "localhost:9092", "localhost:9093", "localhost:9094" };
 
-        public static async Task Main(string[] _)
+        public static void Main(string[] _)
         {
             Console.WriteLine("producer started", Color.Gray);
             
@@ -18,48 +19,17 @@ namespace Funky.Playground.Kafka.Producer
 
             while (input != "exit")
             {
-                Console.WriteLine("send a single message by entering 's' or 'single'", Color.White);
-                Console.WriteLine("send multiple messages by typing 'm' or 'multiple'", Color.White);
+                Console.WriteLine("message count to send", Color.White);
 
-                input = Console.ReadLine();
-
-                if (input == "s" || input == "single")
+                if (int.TryParse(Console.ReadLine(), out var count) && count > 0)
                 {
-                    Console.WriteLine($"sending 1 message", Color.Gray);
-
-                    await SendSingleMessage();
+                    Console.WriteLine($"sending {count} messages", Color.Gray);
+                    SendMultipleMessages(count);
                 }
-                else if (input == "m" || input == "multiple")
+                else
                 {
-                    Console.WriteLine("you choosed to send multiple messages enter a count", Color.White);
-
-                    if (int.TryParse(Console.ReadLine(), out var count) && count > 0)
-                    {
-                        Console.WriteLine($"sending {count} messages", Color.Gray);
-                        SendMultipleMessages(count);
-                    }
-                    else
-                    {
-                        Console.WriteLine("invalid input, starting over", Color.LightYellow);
-                    }
+                    Console.WriteLine("invalid input, starting over", Color.LightYellow);
                 }
-            }
-        }
-
-        private static async Task SendSingleMessage()
-        {
-            var config = new ProducerConfig { BootstrapServers = string.Join(",", brokers) };
-
-            using var producer = new ProducerBuilder<Null, string>(config).Build();
-            
-            try
-            {
-                var delivery = await producer.ProduceAsync("test-topic", new Message<Null, string> { Value = "test" });
-                Console.WriteLine($"Delivered '{delivery.Value}' to '{delivery.TopicPartitionOffset}'", Color.LightGreen);
-            }
-            catch (ProduceException<Null, string> produceException)
-            {
-                Console.WriteLine($"Delivery failed: {produceException.Error.Reason}", Color.Red);
             }
         }
 
@@ -67,7 +37,7 @@ namespace Funky.Playground.Kafka.Producer
         {
             var config = new ProducerConfig { BootstrapServers = string.Join(",", brokers) };
 
-            static void handler(DeliveryReport<Null, string> deliveryReport)
+            static void handler(DeliveryReport<string, ConfigurationChanged> deliveryReport)
             {
                 if (deliveryReport.Error.IsError)
                 {
@@ -79,15 +49,27 @@ namespace Funky.Playground.Kafka.Producer
                 }
             }
 
-            using var producer = new ProducerBuilder<Null, string>(config).Build();
+            using var producer = new ProducerBuilder<string, ConfigurationChanged>(config)
+                .SetKeySerializer(Serializers.Utf8)
+                .SetValueSerializer(new JsonSerializer<ConfigurationChanged>())
+                .Build();
             
             for (var i = 0; i < count; ++i)
             {
-                producer.Produce("test-topic", new Message<Null, string> { Value = i.ToString() }, handler);
+                producer.Produce(ConfigurationChanged.TOPIC, new Message<string, ConfigurationChanged> 
+                { 
+                    Key = Guid.NewGuid().ToString(),
+                    Value = new ConfigurationChanged("test") 
+                }, handler);
             }
 
             // wait for up to 10 seconds for any inflight messages to be delivered.
             producer.Flush(TimeSpan.FromSeconds(10));
         }
+    }
+
+    public class JsonSerializer<T> : ISerializer<T>
+    {
+        public byte[] Serialize(T data, SerializationContext context) => JsonSerializer.SerializeToUtf8Bytes(data);
     }
 }
