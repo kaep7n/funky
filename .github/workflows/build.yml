@@ -13,7 +13,7 @@ jobs:
     - name: setup
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.200
+        dotnet-version: 5.0.100-preview.7.20366.6
     - name: restore
       run: dotnet restore src/Funky.sln
     - name: build
