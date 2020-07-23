@@ -20,7 +20,7 @@ namespace Funky.Playground.Kafka.Consumer
             return new ValueTask();
         }
 
-        public ValueTask StopAsync(CancellationToken cancellationToken = default) => new ValueTask();
+        public ValueTask StopAsync() => new ValueTask();
 
         public IAsyncEnumerable<ConfigurationChanged> ReadAllAsync(CancellationToken cancellationToken = default) => this.incoming.Reader.ReadAllAsync(cancellationToken);
 

@@ -1,7 +1,4 @@
-﻿using Funky.Core;
-using System.Threading.Tasks;
-
-namespace Funky.Fakes
+﻿namespace Funky.Fakes
 {
     public class NoFunk 
     { 

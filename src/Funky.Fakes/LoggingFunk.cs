@@ -19,8 +19,16 @@ namespace Funky.Fakes
             this.logger = logger;
         }
 
-        public Task DisableAsync() => Task.CompletedTask;
+        public Task DisableAsync()
+        {
+            this.logger.LogInformation("disabled");
+            return Task.CompletedTask;
+        }
 
-        public Task EnableAsync() => Task.CompletedTask;
+        public Task EnableAsync() 
+        {
+            this.logger.LogInformation("enabled");
+            return Task.CompletedTask;
+        }
     }
 }

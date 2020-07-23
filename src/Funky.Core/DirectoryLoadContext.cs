@@ -12,14 +12,9 @@ namespace Funky.Core
         private readonly List<string> sharedAssemblies = new List<string>();
 
         public DirectoryLoadContext(string directory)
-            : base($"Funky_{Guid.NewGuid().ToString()}", true)
+            : base($"Funky_{Guid.NewGuid()}", true)
         {
-            if (directory == null)
-            {
-                throw new ArgumentNullException(nameof(directory));
-            }
-
-            this.directory = directory;
+            this.directory = directory ?? throw new ArgumentNullException(nameof(directory));
             this.sharedAssemblies.Add("Funky.Core");
             this.sharedAssemblies.Add("Microsoft.Extensions.DependencyInjection");
             this.sharedAssemblies.Add("Microsoft.Extensions.DependencyInjection.Abstractions");
@@ -31,25 +26,14 @@ namespace Funky.Core
         protected override Assembly Load(AssemblyName assemblyName)
         {
             if (assemblyName is null)
-            {
                 throw new ArgumentNullException(nameof(assemblyName));
-            }
 
             if (this.sharedAssemblies.Contains(assemblyName.Name))
-            {
                 return Default.LoadFromAssemblyName(assemblyName);
-            }
 
             var assemblyPath = Path.Combine(this.directory, $"{assemblyName.Name}.dll");
 
-            if (File.Exists(assemblyPath))
-            {
-                return this.LoadFromAssemblyPath(assemblyPath);
-            }
-            else
-            {
-                return null;
-            }
+            return File.Exists(assemblyPath) ? this.LoadFromAssemblyPath(assemblyPath) : null;
         }
     }
 }
