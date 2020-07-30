@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dotnet-Funky.Bootstrapper-46583448-54CE-4573-B8F0-B17453136863</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.7.20364.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Funky.Core\Funky.Core.csproj" />
+  </ItemGroup>
+</Project>

@@ -80,6 +80,7 @@ namespace Funky.Core.Tests
                     .UseAssembly("Funky.Fakes")
                     .UseFunk("Funky.Fakes.EmptyFunk")
                     .UseStartup("Funky.Fakes.NoStartup")
+                    .AddLogging()
                     .Build());
 
         [Fact]
@@ -89,6 +90,7 @@ namespace Funky.Core.Tests
                 .UseContentRoot("../../../Resources")
                 .UseAssembly("Funky.Fakes")
                 .UseFunk("Funky.Fakes.EmptyFunk")
+                .AddLogging()
                 .Build();
 
             Assert.NotNull(vessel);
@@ -102,6 +104,7 @@ namespace Funky.Core.Tests
                 .UseAssembly("Funky.Fakes")
                 .UseFunk("Funky.Fakes.EmptyFunk")
                 .UseStartup("Funky.Fakes.EmptyStartup")
+                .AddLogging()
                 .Build();
 
             Assert.NotNull(vessel);

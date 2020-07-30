@@ -42,11 +42,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Playground.Kafka", "Funky.Playground.Kafka\Funky.Playground.Kafka.csproj", "{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Events", "Funky.Events\Funky.Events.csproj", "{6024A845-D004-474F-B714-5D2830E2E0B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Events", "Funky.Events\Funky.Events.csproj", "{6024A845-D004-474F-B714-5D2830E2E0B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Events.Kafka", "Funky.Events.Kafka\Funky.Events.Kafka.csproj", "{E85CD0E2-4E78-4EA3-BCAB-3816CD062DB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Events.Kafka", "Funky.Events.Kafka\Funky.Events.Kafka.csproj", "{E85CD0E2-4E78-4EA3-BCAB-3816CD062DB7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kafka", "kafka", "{6C8B6E69-501C-44F4-B617-A0DE2B17EB71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Bootstrapper", "Funky.Bootstrapper\Funky.Bootstrapper.csproj", "{F5BACACC-0CF1-4CBC-BBB0-52E45A991C6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +88,10 @@ Global
 		{E85CD0E2-4E78-4EA3-BCAB-3816CD062DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E85CD0E2-4E78-4EA3-BCAB-3816CD062DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E85CD0E2-4E78-4EA3-BCAB-3816CD062DB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5BACACC-0CF1-4CBC-BBB0-52E45A991C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5BACACC-0CF1-4CBC-BBB0-52E45A991C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5BACACC-0CF1-4CBC-BBB0-52E45A991C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5BACACC-0CF1-4CBC-BBB0-52E45A991C6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

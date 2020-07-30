@@ -36,12 +36,6 @@ namespace Funky.Core
             return this;
         }
 
-        public IVesselBuilder AddLogging()
-        {
-            this.Services.AddLogging();
-            return this;
-        }
-
         public IVesselBuilder AddLogging(Action<ILoggingBuilder> configure)
         {
             this.Services.AddLogging(configure);
@@ -91,6 +85,17 @@ namespace Funky.Core
 
             instance.Configure(this.Services);
 
+            return this;
+        }
+
+        public IVesselBuilder AddLogging()
+        {
+            this.Services.AddLogging(logging =>
+            {
+                logging.AddConsole();
+                logging.AddDebug();
+                logging.AddEventSourceLogger();
+            });
             return this;
         }
     }

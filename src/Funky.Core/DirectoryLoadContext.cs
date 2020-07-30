@@ -19,6 +19,7 @@ namespace Funky.Core
             this.sharedAssemblies.Add("Microsoft.Extensions.DependencyInjection");
             this.sharedAssemblies.Add("Microsoft.Extensions.DependencyInjection.Abstractions");
             this.sharedAssemblies.Add("Microsoft.Extensions.Logging.Abstractions");
+            this.sharedAssemblies.Add("Microsoft.Extensions.Logging");
         }
 
         public IEnumerable<string> SharedAssemblies { get; }

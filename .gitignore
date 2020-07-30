@@ -330,3 +330,6 @@ ASALocalRun/
 .mfractor/
 
 .vscode/
+
+# Test Resources
+src/Funky.Core.Tests/Resources/
