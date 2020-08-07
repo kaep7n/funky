@@ -20,7 +20,7 @@ insert_final_newline = false
 # Organize usings
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = false
-file_header_template = unset
+file_header_template = unset 
 
 # this. and Me. preferences
 dotnet_style_qualification_for_event = true:warning
@@ -202,3 +202,8 @@ dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = none
+
+# Default severity for all analyzer diagnostics
+
+# CA1308: Normalize strings to uppercase
+dotnet_diagnostic.CA1308.severity = none

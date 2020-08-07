@@ -22,7 +22,7 @@ namespace Funky.Bootstrapper
         {
             this.logger.LogInformation("starting bootstrapper");
 
-            await this.vessel.StartAsync()
+            await this.vessel.StartAsync(cancellationToken)
                            .ConfigureAwait(false);
 
             this.logger.LogInformation("started bootstrapper");
@@ -32,7 +32,7 @@ namespace Funky.Bootstrapper
         {
             this.logger.LogInformation("stopping bootstrapper");
 
-            await this.vessel.StopAsync()
+            await this.vessel.StopAsync(cancellationToken)
                 .ConfigureAwait(false);
 
             this.logger.LogInformation("stopped bootstrapper");

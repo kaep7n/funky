@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Funky.Events
+namespace Funky.Core
 {
     public interface IProducer<T>
     {
-        Task ProduceAsync(T @event, CancellationToken cancellationToken = default);
+        Task ProduceAsync(T evt, CancellationToken cancellationToken = default);
     }
 }

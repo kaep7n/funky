@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Funky.Core.Events;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Funky.Events
+namespace Funky.Core
 {
     public interface IConsumer<T>
     {

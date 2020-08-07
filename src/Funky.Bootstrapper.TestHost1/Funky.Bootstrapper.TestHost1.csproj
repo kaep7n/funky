@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Funky.Core\Funky.Core.csproj" />
+    <ProjectReference Include="..\Funky.Kafka\Funky.Kafka.csproj" />
   </ItemGroup>
 
 </Project>

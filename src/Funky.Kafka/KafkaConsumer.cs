@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Funky.Core;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,7 +16,9 @@ namespace Funky.Events.Kafka
         private readonly IConsumer<string, T> consumer;
         private readonly Channel<T> queue = Channel.CreateUnbounded<T>();
 
-        public KafkaConsumer(IEnumerable<string> brokers, string topic)
+        private CancellationTokenSource tokenSource;
+
+        public KafkaConsumer(IEnumerable<string> brokers, string topic, string group)
         {
             if (brokers is null)
                 throw new ArgumentNullException(nameof(brokers));
@@ -27,7 +30,8 @@ namespace Funky.Events.Kafka
 
             var config = new ConsumerConfig
             {
-                BootstrapServers = string.Join(",", this.brokers)
+                BootstrapServers = string.Join(",", this.brokers),
+                GroupId = group
             };
 
             this.consumer = new ConsumerBuilder<string, T>(config)
@@ -38,6 +42,10 @@ namespace Funky.Events.Kafka
 
         public Task EnableAsync(CancellationToken cancellationToken = default)
         {
+            this.tokenSource = new CancellationTokenSource();
+
+            Task.Factory.StartNew(async _ => await this.ProcessAsync(tokenSource.Token), cancellationToken, TaskCreationOptions.LongRunning);
+
             this.consumer.Subscribe(this.topic);
 
             return Task.CompletedTask;
@@ -45,11 +53,31 @@ namespace Funky.Events.Kafka
 
         public Task DisableAsync(CancellationToken cancellationToken = default)
         {
+            this.tokenSource.Cancel();
+
             this.consumer.Unsubscribe();
 
             return Task.CompletedTask;
         }
 
         public IAsyncEnumerable<T> ReadAllAsync(CancellationToken cancellationToken = default) => this.queue.Reader.ReadAllAsync(cancellationToken);
+
+        private async Task ProcessAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    var consumeResult = consumer.Consume(cancellationToken);
+
+                    await this.queue.Writer.WriteAsync(consumeResult.Message.Value);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Ensure the consumer leaves the group cleanly and final offsets are committed.
+                consumer.Close();
+            }
+        }
     }
 }

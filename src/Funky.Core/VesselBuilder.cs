@@ -12,10 +12,9 @@ namespace Funky.Core
         private DirectoryLoadContext loadContext;
         private Assembly assembly;
 
-        public VesselBuilder()
-            => this.Services.AddSingleton<IVessel, Vessel>();
-
         public IServiceCollection Services { get; } = new ServiceCollection();
+
+        public VesselBuilder() => this.Services.AddSingleton<IVessel, Vessel>();
 
         public IVessel Build() => this.Services.BuildServiceProvider()
                 .GetService<IVessel>();
@@ -33,12 +32,6 @@ namespace Funky.Core
             this.loadContext = new DirectoryLoadContext(fullPath);
             this.Services.AddSingleton<AssemblyLoadContext>(this.loadContext);
 
-            return this;
-        }
-
-        public IVesselBuilder AddLogging(Action<ILoggingBuilder> configure)
-        {
-            this.Services.AddLogging(configure);
             return this;
         }
 

@@ -1,28 +1,39 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Funky.Core
 {
-    public class Vessel : IVessel
+    public sealed class Vessel : IVessel
     {
+        private readonly IFunk funk;
         private readonly ILogger<Vessel> logger;
 
-        public Vessel(ILogger<Vessel> logger)
-            => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        public Vessel(IFunk funk, ILogger<Vessel> logger)
+        {
+            this.funk = funk ?? throw new ArgumentNullException(nameof(funk));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
-        public Task StartAsync()
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             this.logger.LogInformation("starting vessel");
 
-            return Task.CompletedTask;
+            await this.funk.EnableAsync()
+                .ConfigureAwait(false);
+
+            this.logger.LogInformation("started vessel");
         }
 
-        public Task StopAsync()
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             this.logger.LogInformation("stopping vessel");
 
-            return Task.CompletedTask;
+            await this.funk.DisableAsync()
+                .ConfigureAwait(false);
+
+            this.logger.LogInformation("stopped vessel");
         }
     }
 }

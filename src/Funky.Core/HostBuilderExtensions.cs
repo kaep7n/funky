@@ -8,10 +8,12 @@ namespace Funky.Core
 {
     public static class HostBuilderExtensions
     {
-        public static IHostBuilder UseFunky(this IHostBuilder hostBuilder)
+        public static IHostBuilder UseFunky(this IHostBuilder hostBuilder, Action<IVesselBuilder> vesselBuilderAction)
         {
             if (hostBuilder is null)
                 throw new ArgumentNullException(nameof(hostBuilder));
+            if (vesselBuilderAction is null)
+                throw new ArgumentNullException(nameof(vesselBuilderAction));
 
             hostBuilder.ConfigureServices((context, services) =>
             {
@@ -21,12 +23,15 @@ namespace Funky.Core
                 {
                     var options = p.GetRequiredService<IOptions<VesselOptions>>();
 
-                    return new VesselBuilder()
+                    var vesselBuilder = new VesselBuilder()
                         .UseContentRoot(options.Value.Dir)
                         .UseAssembly(options.Value.Assembly)
                         .UseFunk(options.Value.Funk)
-                        .AddLogging()
-                        .Build();
+                        .AddLogging();
+
+                    vesselBuilderAction(vesselBuilder);
+
+                    return vesselBuilder.Build();
                 });
 
                 services.AddHostedService<VesselService>();
