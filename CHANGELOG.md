@@ -1,3 +1,10 @@
+# [1.0.0-alpha.3](https://github.com/kaep7n/funky/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2020-10-30)
+
+
+### Features
+
+* introduce kafka ([#7](https://github.com/kaep7n/funky/issues/7)) ([bf928b5](https://github.com/kaep7n/funky/commit/bf928b502e2669b8960d2b53ab2985bc662b9312))
+
 # [1.0.0-alpha.2](https://github.com/kaep7n/funky/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2020-05-20)
 
 
