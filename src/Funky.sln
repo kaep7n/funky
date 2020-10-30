@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Core", "Funky.Core\Funky.Core.csproj", "{4B32A92B-A403-4AD0-8236-86DF9F1B0634}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper", "Funky.Bootstrapper\Funky.Bootstrapper.csproj", "{476705DD-8509-4BDA-BF1B-B567E1D96F74}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Core.Tests", "Funky.Core.Tests\Funky.Core.Tests.csproj", "{FBFD4D33-C285-4272-B726-6E0039FFD3F5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Fakes", "Funky.Fakes\Funky.Fakes.csproj", "{EF1084B5-C799-4AD6-8F75-8847B63741AC}"
@@ -16,29 +14,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".style", ".style", "{DC2A39
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{D958265E-96AA-456F-AD93-3AE9B46F00C8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "playground", "playground", "{D77A2B56-3FAE-4E0E-B238-C890E69A33B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Playground.Kafka.Producer", "Funky.Playground.Kafka.Producer\Funky.Playground.Kafka.Producer.csproj", "{90A58FF2-51A5-49E0-8C1A-AA736108E807}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Playground.Kafka.Consumer", "Funky.Playground.Kafka.Consumer\Funky.Playground.Kafka.Consumer.csproj", "{767B1F6D-BEF2-4E58-8F44-5D268207E523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{4A9C9C34-D8E1-4063-9E80-E5BC9267E056}"
+	ProjectSection(SolutionItems) = preProject
+		..\package.json = ..\package.json
+		..\publish.sh = ..\publish.sh
+		..\release.config.js = ..\release.config.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{98521FB7-4A54-409A-B67B-A00226918B5B}"
 	ProjectSection(SolutionItems) = preProject
 		..\build.sh = ..\build.sh
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".publish", ".publish", "{9D1E1FB7-0BCE-42D2-807E-50737C791A10}"
-	ProjectSection(SolutionItems) = preProject
-		..\publish.sh = ..\publish.sh
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{B271805B-C104-439E-A9DB-8514EF04C455}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{8680541B-1980-419D-BBD8-728E8C4AEDB2}"
-	ProjectSection(SolutionItems) = preProject
-		..\package.json = ..\package.json
-		..\release.config.js = ..\release.config.js
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{64F5B212-D602-4E99-89AA-DC9469771772}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B72A0924-ADF4-4CEF-86C9-E9E2A43D44D7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C5C1E4E9-636E-46FF-BEC9-5A1FE377B03C}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\build.yml = ..\.github\workflows\build.yml
 		..\.github\workflows\release.yml = ..\.github\workflows\release.yml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Playground.Kafka", "Funky.Playground.Kafka\Funky.Playground.Kafka.csproj", "{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kafka", "kafka", "{6C8B6E69-501C-44F4-B617-A0DE2B17EB71}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost1", "Funky.Bootstrapper.TestHost1\Funky.Bootstrapper.TestHost1.csproj", "{F5A1BFEA-BC84-4F47-A5D8-D1BDECA452CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost2", "Funky.Bootstrapper.TestHost2\Funky.Bootstrapper.TestHost2.csproj", "{481EEAC8-3CE0-4F32-B00E-41CCFB744CD5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Kafka", "Funky.Kafka\Funky.Kafka.csproj", "{930CAB47-0AE7-4A50-A3BA-4981AB67C28C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,10 +60,6 @@ Global
 		{4B32A92B-A403-4AD0-8236-86DF9F1B0634}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B32A92B-A403-4AD0-8236-86DF9F1B0634}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B32A92B-A403-4AD0-8236-86DF9F1B0634}.Release|Any CPU.Build.0 = Release|Any CPU
-		{476705DD-8509-4BDA-BF1B-B567E1D96F74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{476705DD-8509-4BDA-BF1B-B567E1D96F74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{476705DD-8509-4BDA-BF1B-B567E1D96F74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{476705DD-8509-4BDA-BF1B-B567E1D96F74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBFD4D33-C285-4272-B726-6E0039FFD3F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBFD4D33-C285-4272-B726-6E0039FFD3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBFD4D33-C285-4272-B726-6E0039FFD3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,12 +68,41 @@ Global
 		{EF1084B5-C799-4AD6-8F75-8847B63741AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF1084B5-C799-4AD6-8F75-8847B63741AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF1084B5-C799-4AD6-8F75-8847B63741AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5A1BFEA-BC84-4F47-A5D8-D1BDECA452CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A1BFEA-BC84-4F47-A5D8-D1BDECA452CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A1BFEA-BC84-4F47-A5D8-D1BDECA452CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A1BFEA-BC84-4F47-A5D8-D1BDECA452CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481EEAC8-3CE0-4F32-B00E-41CCFB744CD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481EEAC8-3CE0-4F32-B00E-41CCFB744CD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481EEAC8-3CE0-4F32-B00E-41CCFB744CD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481EEAC8-3CE0-4F32-B00E-41CCFB744CD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{930CAB47-0AE7-4A50-A3BA-4981AB67C28C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{930CAB47-0AE7-4A50-A3BA-4981AB67C28C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{930CAB47-0AE7-4A50-A3BA-4981AB67C28C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{930CAB47-0AE7-4A50-A3BA-4981AB67C28C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B72A0924-ADF4-4CEF-86C9-E9E2A43D44D7} = {64F5B212-D602-4E99-89AA-DC9469771772}
+		{90A58FF2-51A5-49E0-8C1A-AA736108E807} = {6C8B6E69-501C-44F4-B617-A0DE2B17EB71}
+		{767B1F6D-BEF2-4E58-8F44-5D268207E523} = {6C8B6E69-501C-44F4-B617-A0DE2B17EB71}
+		{B271805B-C104-439E-A9DB-8514EF04C455} = {4A9C9C34-D8E1-4063-9E80-E5BC9267E056}
+		{C5C1E4E9-636E-46FF-BEC9-5A1FE377B03C} = {B271805B-C104-439E-A9DB-8514EF04C455}
+		{4A54260E-9F3F-4F0E-8CD9-5A8D6A7BCD85} = {6C8B6E69-501C-44F4-B617-A0DE2B17EB71}
+		{6C8B6E69-501C-44F4-B617-A0DE2B17EB71} = {D77A2B56-3FAE-4E0E-B238-C890E69A33B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B3BF6A1-5C1D-43BF-B441-B4A69CECAC31}

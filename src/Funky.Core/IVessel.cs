@@ -1,12 +1,13 @@
 
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Funky.Core
 {
     public interface IVessel
     {
-        ValueTask StartAsync();
+        Task StartAsync(CancellationToken cancellationToken = default);
 
-        ValueTask StopAsync();
+        Task StopAsync(CancellationToken cancellationToken = default);
     }
 }
