@@ -20,8 +20,6 @@ namespace Funky.Playground.Kafka.Consumer
             return new ValueTask();
         }
 
-        public ValueTask StopAsync() => new ValueTask();
-
         public IAsyncEnumerable<ConfigurationChanged> ReadAllAsync(CancellationToken cancellationToken = default) => this.incoming.Reader.ReadAllAsync(cancellationToken);
 
         private async Task ProcessAsync(CancellationToken cancellationToken = default)
@@ -45,7 +43,7 @@ namespace Funky.Playground.Kafka.Consumer
                 {
                     var consumeResult = consumer.Consume(cancellationToken);
 
-                    await this.incoming.Writer.WriteAsync(consumeResult.Message.Value);
+                    await this.incoming.Writer.WriteAsync(consumeResult.Message.Value, cancellationToken);
                 }
             }
             catch (OperationCanceledException)

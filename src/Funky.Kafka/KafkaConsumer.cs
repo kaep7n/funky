@@ -70,7 +70,7 @@ namespace Funky.Events.Kafka
                 {
                     var consumeResult = consumer.Consume(cancellationToken);
 
-                    await this.queue.Writer.WriteAsync(consumeResult.Message.Value);
+                    await this.queue.Writer.WriteAsync(consumeResult.Message.Value, cancellationToken);
                 }
             }
             catch (OperationCanceledException)

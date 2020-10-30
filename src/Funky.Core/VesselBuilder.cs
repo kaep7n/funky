@@ -73,7 +73,7 @@ namespace Funky.Core
             if (type == null)
                 throw new TypeNotFoundException($"Type {startupTypeName} not found in assembly {this.assembly.FullName}");
 
-            if (!(Activator.CreateInstance(type) is IStartup instance))
+            if (Activator.CreateInstance(type) is not IStartup instance)
                 throw new InvalidStartupException($"Type {type.FullName} does not implement interface");
 
             instance.Configure(this.Services);
