@@ -21,7 +21,7 @@ namespace Funky.Core.Tests
 
             var exception = Assert.Throws<ArgumentException>(() => new VesselBuilder().UseContentRoot(nonExistingDirectory));
 
-            Assert.Equal($"directory does not exist (Parameter 'path')", exception.Message);
+            Assert.Equal($"Path '{nonExistingDirectory}' does not exist (Parameter 'path')", exception.Message);
         }
 
         [Fact]
@@ -49,44 +49,49 @@ namespace Funky.Core.Tests
         }
 
         [Fact]
-        public void Should_throw_FileNotFoundExceptionon_on_not_existing_assembly() => Assert.Throws<FileNotFoundException>(() => new VesselBuilder()
-                                                                                     .UseContentRoot("../../../Resources")
-                                                                                     .UseAssembly("Assembly.Does.Not.Exist"));
+        public void Should_throw_FileNotFoundExceptionon_on_not_existing_assembly()
+            => Assert.Throws<FileNotFoundException>(() => new VesselBuilder()
+                    .UseContentRoot("../../../Resources")
+                    .UseAssembly("Assembly.Does.Not.Exist"));
 
         [Fact]
-        public void Should_throw_TypeNotFoundException_on_not_existing_type() => Assert.Throws<TypeNotFoundException>(() => new VesselBuilder()
-                                                                               .UseContentRoot("../../../Resources")
-                                                                               .UseAssembly("Funky.Fakes")
-                                                                               .UseFunk("Type.Does.Not.Exist"));
+        public void Should_throw_TypeNotFoundException_on_not_existing_type()
+            => Assert.Throws<TypeNotFoundException>(() => new VesselBuilder()
+                    .UseContentRoot("../../../Resources")
+                    .UseAssembly("Funky.Fakes")
+                    .UseFunk("Type.Does.Not.Exist"));
 
         [Fact]
         public void Should_throw_ArgumentException_on_type_that_does_not_implemented_IFunk()
         {
             var exception = Assert.Throws<ArgumentException>(() => new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.NoFunk")
-            .Build());
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.NoFunk")
+                .Build());
 
             Assert.Equal("Implementation type 'Funky.Fakes.NoFunk' can't be converted to service type 'Funky.Core.IFunk'", exception.Message);
         }
 
         [Fact]
-        public void Should_throw_InvalidStartupException_() => Assert.Throws<InvalidStartupException>(() => new VesselBuilder()
-                                                             .UseContentRoot("../../../Resources")
-                                                             .UseAssembly("Funky.Fakes")
-                                                             .UseFunk("Funky.Fakes.EmptyFunk")
-                                                             .UseStartup("Funky.Fakes.NoStartup")
-                                                             .Build());
+        public void Should_throw_InvalidStartupException_()
+            => Assert.Throws<InvalidStartupException>(() => new VesselBuilder()
+                    .UseContentRoot("../../../Resources")
+                    .UseAssembly("Funky.Fakes")
+                    .UseFunk("Funky.Fakes.EmptyFunk")
+                    .UseStartup("Funky.Fakes.NoStartup")
+                    .AddLogging()
+                    .Build());
 
         [Fact]
         public void Should_create_vessel_on_build()
         {
             var vessel = new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.EmptyFunk")
-            .Build();
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.EmptyFunk")
+                .AddLogging()
+                .Build();
 
             Assert.NotNull(vessel);
         }
@@ -95,11 +100,12 @@ namespace Funky.Core.Tests
         public void Should_create_vessel_with_empty_startup_on_build()
         {
             var vessel = new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.EmptyFunk")
-            .UseStartup("Funky.Fakes.EmptyStartup")
-            .Build();
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.EmptyFunk")
+                .UseStartup("Funky.Fakes.EmptyStartup")
+                .AddLogging()
+                .Build();
 
             Assert.NotNull(vessel);
         }
@@ -108,12 +114,12 @@ namespace Funky.Core.Tests
         public void Should_create_vessel_with_logging_funk_and_empty_startup_on_build()
         {
             var vessel = new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.LoggingFunk")
-            .UseStartup("Funky.Fakes.EmptyStartup")
-            .AddLogging()
-            .Build();
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.LoggingFunk")
+                .UseStartup("Funky.Fakes.EmptyStartup")
+                .AddLogging()
+                .Build();
 
             Assert.NotNull(vessel);
         }
@@ -122,12 +128,12 @@ namespace Funky.Core.Tests
         public void Should_create_vessel_with_logging_funk_and_logging_startup_on_build()
         {
             var vessel = new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.LoggingFunk")
-            .UseStartup("Funky.Fakes.LoggingStartup")
-            .AddLogging()
-            .Build();
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.LoggingFunk")
+                .UseStartup("Funky.Fakes.LoggingStartup")
+                .AddLogging()
+                .Build();
 
             Assert.NotNull(vessel);
         }
@@ -136,11 +142,11 @@ namespace Funky.Core.Tests
         public void Should_create_vessel_with_logging_startup_on_build()
         {
             var vessel = new VesselBuilder()
-            .UseContentRoot("../../../Resources")
-            .UseAssembly("Funky.Fakes")
-            .UseFunk("Funky.Fakes.LoggingFunk")
-            .UseStartup("Funky.Fakes.LoggingStartup")
-            .Build();
+                .UseContentRoot("../../../Resources")
+                .UseAssembly("Funky.Fakes")
+                .UseFunk("Funky.Fakes.LoggingFunk")
+                .UseStartup("Funky.Fakes.LoggingStartup")
+                .Build();
 
             Assert.NotNull(vessel);
         }

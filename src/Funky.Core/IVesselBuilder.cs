@@ -1,6 +1,5 @@
+
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
 
 namespace Funky.Core
 {
@@ -11,8 +10,6 @@ namespace Funky.Core
         IVesselBuilder UseContentRoot(string path);
 
         IVesselBuilder AddLogging();
-
-        IVesselBuilder AddLogging(Action<ILoggingBuilder> configureLogging);
 
         IVesselBuilder UseAssembly(string assemblyName);
 
