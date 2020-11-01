@@ -3,9 +3,9 @@ name: release
 on:
   push:
     branches:
-    - master
     - beta
     - alpha
+    - v[12].[0-9]+.[0-9]+
 
 jobs:
   release:
