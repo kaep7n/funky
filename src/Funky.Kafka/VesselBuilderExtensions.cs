@@ -10,10 +10,10 @@ namespace Funky.Kafka
     {
         private static readonly string[] brokers = new[] { "localhost:9092", "localhost:9093", "localhost:9094" };
 
-        public static IVesselBuilder UseKafka(this IVesselBuilder builder)
+        public static IVesselBuilder UseKafka(this IVesselBuilder builder, string consumerGroup)
         {
-            builder.Services.AddTransient<IConsumer<ConfigurationChanged>>(_ => new KafkaConsumer<ConfigurationChanged>(brokers, "system", "system"));
-            builder.Services.AddTransient<IProducer<ConfigurationChanged>>(_ => new KafkaProducer<ConfigurationChanged>(brokers, "system", _.GetRequiredService<ILogger<KafkaProducer<ConfigurationChanged>>>()));
+            builder.Services.AddTransient<IConsumer<ConfigurationChanged>>(_ => new KafkaConsumer<ConfigurationChanged>(brokers, "system.configuration", consumerGroup));
+            builder.Services.AddTransient<IProducer<ConfigurationChanged>>(_ => new KafkaProducer<ConfigurationChanged>(brokers, "system.configuration", _.GetRequiredService<ILogger<KafkaProducer<ConfigurationChanged>>>()));
 
             return builder;
         }

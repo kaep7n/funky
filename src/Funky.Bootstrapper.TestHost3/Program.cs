@@ -3,9 +3,9 @@ using Funky.Kafka;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
-namespace Funky.Bootstrapper.TestHost1
+namespace Funky.Bootstrapper.TestHost3
 {
-    public class Program
+    class Program
     {
         public static async Task Main(string[] args)
             => await CreateHostBuilder(args)
@@ -16,7 +16,7 @@ namespace Funky.Bootstrapper.TestHost1
             Host.CreateDefaultBuilder(args)
                 .UseFunky(builder =>
                 {
-                    builder.UseKafka("sys1");
+                    builder.UseKafka("sys3");
                 });
     }
 }

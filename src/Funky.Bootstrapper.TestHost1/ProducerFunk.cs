@@ -17,7 +17,7 @@ namespace Funky.Bootstrapper.TestHost1
 
         public ProducerFunk(IProducer<ConfigurationChanged> producer, ILogger<ProducerFunk> logger)
         {
-            this.timer = new Timer(100);
+            this.timer = new Timer(1000);
             this.timer.Elapsed += this.Timer_Elapsed;
             this.producer = producer ?? throw new ArgumentNullException(nameof(producer));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

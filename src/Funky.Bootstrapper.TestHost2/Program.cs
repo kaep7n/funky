@@ -16,7 +16,7 @@ namespace Funky.Bootstrapper.TestHost2
             Host.CreateDefaultBuilder(args)
                 .UseFunky(builder =>
                 {
-                    builder.UseKafka();
+                    builder.UseKafka("sys2");
                 });
     }
 }
