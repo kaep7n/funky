@@ -1,95 +1,81 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Funky.Core
 {
-    public class VesselBuilder : IVesselBuilder
+    public sealed class VesselBuilder : IVesselBuilder, IServiceCollection
     {
-        private DirectoryLoadContext loadContext;
-        private Assembly assembly;
+        private readonly IServiceCollection services = new ServiceCollection();
+        private readonly List<Assembly> assemblies = new List<Assembly>();
+        private readonly List<AssemblyLoadContext> assemblyLoadContexts = new List<AssemblyLoadContext>();
 
-        public IServiceCollection Services { get; } = new ServiceCollection();
+        public VesselBuilder() => this.services.AddSingleton<IVessel>((p) => new Vessel(p.GetRequiredService<ILogger<Vessel>>()));
 
-        public VesselBuilder() => this.Services.AddSingleton<IVessel, Vessel>();
+        public IVesselBuilder UseAssemblies(params string[] assemblyNames)
+        {
+            if (assemblyNames is null)
+                throw new ArgumentNullException(nameof(assemblyNames));
 
-        public IVessel Build() => this.Services.BuildServiceProvider()
+            foreach (var assemblyName in assemblyNames)
+            {
+                var context = new DirectoryLoadContext(Directory.GetCurrentDirectory());
+
+                var assembly = context.LoadFromAssemblyName(new AssemblyName(assemblyName));
+
+                this.assemblies.Add(assembly);
+                this.assemblyLoadContexts.Add(context);
+
+                var types = assembly.GetTypes();
+
+                foreach (var type in types)
+                {
+                    if (typeof(IFunk).IsAssignableFrom(type))
+                    {
+                        // works for EmptyFunk
+                    }
+                    if (typeof(IFunk<>).IsAssignableFrom(type))
+                    {
+                        // should work for LoggingFunk but doesnt
+                    }
+                }
+            }
+
+            return this;
+        }
+
+        public ServiceDescriptor this[int index] { get => ((IList<ServiceDescriptor>)this.services)[index]; set => ((IList<ServiceDescriptor>)this.services)[index] = value; }
+
+        public int Count => ((ICollection<ServiceDescriptor>)this.services).Count;
+
+        public bool IsReadOnly => ((ICollection<ServiceDescriptor>)this.services).IsReadOnly;
+
+        public void Add(ServiceDescriptor item) => ((ICollection<ServiceDescriptor>)this.services).Add(item);
+
+        public IVessel Build() => this.services.BuildServiceProvider()
                 .GetService<IVessel>();
 
-        public IVesselBuilder UseContentRoot(string path)
-        {
-            if (path is null)
-                throw new ArgumentNullException(nameof(path));
+        public void Clear() => ((ICollection<ServiceDescriptor>)this.services).Clear();
 
-            var fullPath = Path.GetFullPath(path);
+        public bool Contains(ServiceDescriptor item) => ((ICollection<ServiceDescriptor>)this.services).Contains(item);
 
-            if (!Directory.Exists(fullPath))
-                throw new ArgumentException($"Path '{fullPath}' does not exist", nameof(path));
+        public void CopyTo(ServiceDescriptor[] array, int arrayIndex) => ((ICollection<ServiceDescriptor>)this.services).CopyTo(array, arrayIndex);
 
-            this.loadContext = new DirectoryLoadContext(fullPath);
-            this.Services.AddSingleton<AssemblyLoadContext>(this.loadContext);
+        public IEnumerator<ServiceDescriptor> GetEnumerator() => ((IEnumerable<ServiceDescriptor>)this.services).GetEnumerator();
 
-            return this;
-        }
+        public int IndexOf(ServiceDescriptor item) => ((IList<ServiceDescriptor>)this.services).IndexOf(item);
 
-        public IVesselBuilder UseAssembly(string assemblyName)
-        {
-            if (assemblyName is null)
-                throw new ArgumentNullException(nameof(assemblyName));
+        public void Insert(int index, ServiceDescriptor item) => ((IList<ServiceDescriptor>)this.services).Insert(index, item);
 
-            this.assembly = this.loadContext.LoadFromAssemblyName(new AssemblyName(assemblyName));
+        public bool Remove(ServiceDescriptor item) => ((ICollection<ServiceDescriptor>)this.services).Remove(item);
 
-            return this;
-        }
+        public void RemoveAt(int index) => ((IList<ServiceDescriptor>)this.services).RemoveAt(index);
 
-        public IVesselBuilder UseFunk(string funkTypeName)
-        {
-            if (funkTypeName is null)
-                throw new ArgumentNullException(nameof(funkTypeName));
-
-            var type = this.assembly.GetType(funkTypeName);
-
-            if(type == null)
-                throw new TypeNotFoundException($"Type {funkTypeName} not found in assembly {this.assembly.FullName}");
-
-            if (!typeof(IFunk).IsAssignableFrom(type))
-                throw new ArgumentException($"Implementation type '{type.FullName}' can't be converted to service type '{typeof(IFunk).FullName}'");
-
-            this.Services.AddSingleton(typeof(IFunk), type);
-
-            return this;
-        }
-
-        public IVesselBuilder UseStartup(string startupTypeName)
-        {
-            if (startupTypeName is null)
-                throw new ArgumentNullException(nameof(startupTypeName));
-
-            var type = this.assembly.GetType(startupTypeName);
-
-            if (type == null)
-                throw new TypeNotFoundException($"Type {startupTypeName} not found in assembly {this.assembly.FullName}");
-
-            if (Activator.CreateInstance(type) is not IStartup instance)
-                throw new InvalidStartupException($"Type {type.FullName} does not implement interface");
-
-            instance.Configure(this.Services);
-
-            return this;
-        }
-
-        public IVesselBuilder AddLogging()
-        {
-            this.Services.AddLogging(logging =>
-            {
-                logging.AddConsole();
-                logging.AddDebug();
-                logging.AddEventSourceLogger();
-            });
-            return this;
-        }
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)this.services).GetEnumerator();
     }
 }

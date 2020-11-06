@@ -52,6 +52,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost3", "tests\Funky.Bootstrapper.TestHost3\Funky.Bootstrapper.TestHost3.csproj", "{25EA7479-35DB-4AD0-A7C2-81B4A34CA056}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Core.Tests", "tests\Funky.Core.Tests\Funky.Core.Tests.csproj", "{02315457-E473-4098-A142-7A469417F9DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +96,10 @@ Global
 		{25EA7479-35DB-4AD0-A7C2-81B4A34CA056}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25EA7479-35DB-4AD0-A7C2-81B4A34CA056}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25EA7479-35DB-4AD0-A7C2-81B4A34CA056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02315457-E473-4098-A142-7A469417F9DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02315457-E473-4098-A142-7A469417F9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02315457-E473-4098-A142-7A469417F9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02315457-E473-4098-A142-7A469417F9DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{FFC6899B-DB9F-4DE1-9876-D18B084BB612} = {9808812B-87AA-43C3-8047-3386674C599E}
 		{126A6D71-5164-4AA6-BF0F-8DE27265A7B4} = {9808812B-87AA-43C3-8047-3386674C599E}
 		{25EA7479-35DB-4AD0-A7C2-81B4A34CA056} = {9808812B-87AA-43C3-8047-3386674C599E}
+		{02315457-E473-4098-A142-7A469417F9DF} = {9808812B-87AA-43C3-8047-3386674C599E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B3BF6A1-5C1D-43BF-B441-B4A69CECAC31}

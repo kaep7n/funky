@@ -1,12 +1,9 @@
+using System.Collections.Generic;
 
 namespace Funky.Core
 {
     public class VesselOptions
     {
-        public string Dir { get; set; }
-
-        public string Assembly { get; set; }
-
-        public string Funk { get; set; }
+        public IEnumerable<string> Assemblies { get; set; }
     }
 }

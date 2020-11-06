@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Funky.Fakes
 {
-    public class EmptyStartup : IStartup
+    public class EmptyStartup : IInitializer
     {
         public void Configure(IServiceCollection services)
         {

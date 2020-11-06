@@ -1,5 +1,4 @@
-﻿using Funky.Core.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 

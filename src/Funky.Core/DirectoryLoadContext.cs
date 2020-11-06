@@ -22,8 +22,6 @@ namespace Funky.Core
             this.sharedAssemblies.Add("Microsoft.Extensions.Logging");
         }
 
-        public IEnumerable<string> SharedAssemblies { get; }
-
         protected override Assembly Load(AssemblyName assemblyName)
         {
             if (assemblyName is null)

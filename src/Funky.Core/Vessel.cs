@@ -10,7 +10,9 @@ namespace Funky.Core
         private readonly ILogger<Vessel> logger;
 
         public Vessel(ILogger<Vessel> logger)
-            => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {

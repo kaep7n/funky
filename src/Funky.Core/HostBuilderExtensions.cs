@@ -23,11 +23,7 @@ namespace Funky.Core
                 {
                     var options = p.GetRequiredService<IOptions<VesselOptions>>();
 
-                    var vesselBuilder = new VesselBuilder()
-                        .UseContentRoot(options.Value.Dir)
-                        .UseAssembly(options.Value.Assembly)
-                        .UseFunk(options.Value.Funk)
-                        .AddLogging();
+                    var vesselBuilder = new VesselBuilder();
 
                     vesselBuilderAction(vesselBuilder);
 

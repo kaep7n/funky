@@ -12,8 +12,8 @@ namespace Funky.Kafka
 
         public static IVesselBuilder UseKafka(this IVesselBuilder builder, string consumerGroup)
         {
-            builder.Services.AddTransient<IConsumer<ConfigurationChanged>>(_ => new KafkaConsumer<ConfigurationChanged>(brokers, "system.configuration", consumerGroup));
-            builder.Services.AddTransient<IProducer<ConfigurationChanged>>(_ => new KafkaProducer<ConfigurationChanged>(brokers, "system.configuration", _.GetRequiredService<ILogger<KafkaProducer<ConfigurationChanged>>>()));
+            //builder.Services.AddTransient<IConsumer<ConfigurationChanged>>(_ => new KafkaConsumer<ConfigurationChanged>(brokers, "system.configuration", consumerGroup));
+            //builder.Services.AddTransient<IProducer<ConfigurationChanged>>(_ => new KafkaProducer<ConfigurationChanged>(brokers, "system.configuration", _.GetRequiredService<ILogger<KafkaProducer<ConfigurationChanged>>>()));
 
             return builder;
         }
