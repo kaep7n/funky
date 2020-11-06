@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace Funky.Fakes
 {
-    public class LoggingFunk : IFunk
+    public record LogMessage(string Message);
+
+    public class LoggingFunk : IFunk<LogMessage>
     {
         private readonly ILogger<LoggingFunk> logger;
 
@@ -19,16 +21,14 @@ namespace Funky.Fakes
             this.logger = logger;
         }
 
-        public Task DisableAsync()
+        public ValueTask ExecuteAsync(LogMessage message)
         {
-            this.logger.LogInformation("disabled");
-            return Task.CompletedTask;
-        }
+            if (message is null)
+                throw new ArgumentNullException(nameof(message));
 
-        public Task EnableAsync() 
-        {
-            this.logger.LogInformation("enabled");
-            return Task.CompletedTask;
+            this.logger.LogInformation(message.Message);
+
+            return new ValueTask();
         }
     }
 }

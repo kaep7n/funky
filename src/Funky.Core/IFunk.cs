@@ -4,8 +4,11 @@ namespace Funky.Core
 {
     public interface IFunk
     {
-        Task EnableAsync();
+        ValueTask ExecuteAsync();
+    }
 
-        Task DisableAsync();
+    public interface IFunk<TMessage>
+    {
+        ValueTask ExecuteAsync(TMessage message);
     }
 }
