@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -35,13 +36,11 @@ namespace Funky.Core
 
                 foreach (var type in types)
                 {
-                    if (typeof(IFunk).IsAssignableFrom(type))
+                    var intefaces = type.GetInterfaces();
+
+                    if (intefaces.Any(i => i == typeof(IFunk) || (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IFunk<>))))
                     {
-                        // works for EmptyFunk
-                    }
-                    if (typeof(IFunk<>).IsAssignableFrom(type))
-                    {
-                        // should work for LoggingFunk but doesnt
+
                     }
                 }
             }
