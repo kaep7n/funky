@@ -13,8 +13,8 @@ namespace Funky.Core
     public sealed class VesselBuilder : IVesselBuilder, IServiceCollection
     {
         private readonly IServiceCollection services = new ServiceCollection();
-        private readonly List<Assembly> assemblies = new List<Assembly>();
-        private readonly List<AssemblyLoadContext> assemblyLoadContexts = new List<AssemblyLoadContext>();
+        private readonly List<Assembly> assemblies = new();
+        private readonly List<AssemblyLoadContext> assemblyLoadContexts = new();
 
         public VesselBuilder() => this.services.AddSingleton<IVessel>((p) => new Vessel(p.GetRequiredService<ILogger<Vessel>>()));
 
@@ -40,7 +40,6 @@ namespace Funky.Core
 
                     if (intefaces.Any(i => i == typeof(IFunk) || (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IFunk<>))))
                     {
-
                     }
                 }
             }
