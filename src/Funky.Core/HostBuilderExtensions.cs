@@ -17,20 +17,20 @@ namespace Funky.Core
 
             hostBuilder.ConfigureServices((context, services) =>
             {
-                services.Configure<VesselOptions>(context.Configuration.GetSection("funky:vessel"));
+                //services.Configure<VesselOptions>(context.Configuration.GetSection("funky:vessel"));
 
-                services.AddSingleton(p =>
-                {
-                    var options = p.GetRequiredService<IOptions<VesselOptions>>();
+                //services.AddSingleton(p =>
+                //{
+                //    var options = p.GetRequiredService<IOptions<VesselOptions>>();
 
-                    var vesselBuilder = new VesselBuilder();
+                //    var vesselBuilder = new VesselBuilder();
 
-                    vesselBuilderAction(vesselBuilder);
+                //    vesselBuilderAction(vesselBuilder);
 
-                    return vesselBuilder.Build();
-                });
+                //    return vesselBuilder.Build();
+                //});
 
-                services.AddHostedService<VesselService>();
+                //services.AddHostedService<VesselControllerService>();
             });
 
             return hostBuilder;
