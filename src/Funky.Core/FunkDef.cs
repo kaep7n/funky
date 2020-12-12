@@ -3,9 +3,9 @@ using System.Reflection;
 
 namespace Funky.Core
 { 
-    public readonly struct FunkDefinition : IEquatable<FunkDefinition>
+    public readonly struct FunkDef : IEquatable<FunkDef>
     {
-        public FunkDefinition(string fullQualifiedName)
+        public FunkDef(string fullQualifiedName)
         {
             if (string.IsNullOrEmpty(fullQualifiedName))
                 throw new ArgumentException("expected not null or empty", nameof(fullQualifiedName));
@@ -23,23 +23,15 @@ namespace Funky.Core
         public AssemblyName Assembly {get;}
 
         public override bool Equals(object obj)
-            => obj is FunkDefinition definition
+            => obj is FunkDef definition
             && this.Type == definition.Type
             && this.Assembly == definition.Assembly;
 
         public override int GetHashCode() => HashCode.Combine(this.Type, this.Assembly);
 
-        public bool Equals(FunkDefinition other)
+        public bool Equals(FunkDef other)
             => this.Equals(other);
 
         public override string ToString() => $"{this.Type}, {this.Assembly.FullName}";
-
-        public static implicit operator string(FunkDefinition definition) => definition.ToString();
-
-        public static implicit operator FunkDefinition(string fullQualifiedName) => new(fullQualifiedName);
-
-        public static bool operator ==(FunkDefinition left, FunkDefinition right) => left.Equals(right);
-
-        public static bool operator !=(FunkDefinition left, FunkDefinition right) => !(left == right);
     }
 }

@@ -4,6 +4,6 @@ namespace Funky.Core
 {
     public class VesselControllerServiceOptions
     {
-        public IEnumerable<string> Funks { get; set; }
+        public IEnumerable<string> FunkDefs { get; set; }
     }
 }

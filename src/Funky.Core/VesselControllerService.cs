@@ -1,12 +1,12 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Funky.Core;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Funky.Bootstrapper
+namespace Funky.Core
 {
     public class VesselControllerService : IHostedService
     {
@@ -21,8 +21,13 @@ namespace Funky.Bootstrapper
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            foreach (FunkDefinition definition in this.optionsMonitor.CurrentValue.Funks)
+            foreach (var configuredDef in this.optionsMonitor.CurrentValue.FunkDefs)
             {
+                var funkDef = new FunkDef(configuredDef);
+                var loadContext = new DirectoryLoadContext(Directory.GetCurrentDirectory());
+                var assembly = loadContext.LoadFromAssemblyName(funkDef.Assembly);
+
+                assembly.CreateInstance(funkDef.Type);
             }
 
             return Task.CompletedTask;
