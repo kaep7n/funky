@@ -12,10 +12,10 @@ namespace Funky.Core.Tests
         public void Ctor_()
         {
             var type = typeof(LoggingFunk);
-            var definition = new FunkDef(type.AssemblyQualifiedName);
+            var expectedTypeName = new TypeName(type.AssemblyQualifiedName);
+            var actualDefinition = new FunkDef(type.AssemblyQualifiedName);
 
-            Assert.Equal(type.FullName, definition.Type);
-            Assert.Equal(type.Assembly.GetName().ToString(), definition.Assembly.ToString());
+            Assert.Equal(expectedTypeName, actualDefinition.TypeName);
         }
     }
 }

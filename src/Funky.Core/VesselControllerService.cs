@@ -25,9 +25,9 @@ namespace Funky.Core
             {
                 var funkDef = new FunkDef(configuredDef);
                 var loadContext = new DirectoryLoadContext(Directory.GetCurrentDirectory());
-                var assembly = loadContext.LoadFromAssemblyName(funkDef.Assembly);
+                var assembly = loadContext.LoadFromAssemblyName(funkDef.TypeName.Assembly);
 
-                assembly.CreateInstance(funkDef.Type);
+                var instance = assembly.CreateInstance(funkDef.TypeName.FullName);
             }
 
             return Task.CompletedTask;

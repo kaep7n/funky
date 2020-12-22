@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 
 namespace Funky.Core
 {
     public class VesselControllerServiceOptions
     {
-        public IEnumerable<string> FunkDefs { get; set; }
+        public IEnumerable<string> FunkDefs { get; set; } = Array.Empty<string>();
     }
 }
