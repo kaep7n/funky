@@ -23,11 +23,12 @@ namespace Funky.Core
         {
             foreach (var configuredDef in this.optionsMonitor.CurrentValue.FunkDefs)
             {
+                // TODO: use one vessel per definition and manage list of vessel's
                 var funkDef = new FunkDef(configuredDef);
                 var loadContext = new DirectoryLoadContext(Directory.GetCurrentDirectory());
                 var assembly = loadContext.LoadFromAssemblyName(funkDef.TypeName.Assembly);
 
-                var instance = assembly.CreateInstance(funkDef.TypeName.FullName);
+                var instance = (IFunk)assembly.CreateInstance(funkDef.TypeName.FullName);
             }
 
             return Task.CompletedTask;

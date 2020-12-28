@@ -9,7 +9,7 @@ namespace Funky.Core
     public class DirectoryLoadContext : AssemblyLoadContext
     {
         private readonly string directory;
-        private readonly List<string> sharedAssemblies = new List<string>();
+        private readonly List<string> sharedAssemblies = new();
 
         public DirectoryLoadContext(string directory)
             : base($"Funky_{Guid.NewGuid()}", true)
