@@ -8,6 +8,8 @@ namespace Funky.Core
     {
         Task StartAsync(CancellationToken cancellationToken = default);
 
+        Task ConsumeAsync();
+
         Task StopAsync(CancellationToken cancellationToken = default);
     }
 }

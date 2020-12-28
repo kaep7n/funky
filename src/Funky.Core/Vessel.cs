@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
+using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,29 +9,33 @@ namespace Funky.Core
 {
     public sealed class Vessel : IVessel
     {
-        private readonly ILogger<Vessel> logger;
+        private readonly AssemblyLoadContext context = new DirectoryLoadContext(Directory.GetCurrentDirectory());
+        private readonly FunkDef funkDef;
+        private IServiceProvider serviceProvider;
 
-        public Vessel(ILogger<Vessel> logger)
-        {
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
+        public Vessel(FunkDef funkDef) => this.funkDef = funkDef;
 
         public Task StartAsync(CancellationToken cancellationToken = default)
         {
-            this.logger.LogInformation("starting vessel");
+            var assembly = this.context.LoadFromAssemblyName(funkDef.TypeName.Assembly);
+            var funkType = assembly.GetType(funkDef.TypeName.FullName);
 
-            this.logger.LogInformation("started vessel");
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddTransient(typeof(IFunk), funkType);
+
+            this.serviceProvider = serviceCollection.BuildServiceProvider();
 
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken = default)
+        public async Task ConsumeAsync()
         {
-            this.logger.LogInformation("stopping vessel");
+            var funk = this.serviceProvider.GetRequiredService<IFunk>();
 
-            this.logger.LogInformation("stopped vessel");
-
-            return Task.CompletedTask;
+            await funk.ExecuteAsync()
+                .ConfigureAwait(false);
         }
+
+        public Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
 }

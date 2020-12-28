@@ -1,43 +1,47 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
-public sealed class TypeName : IEquatable<TypeName>
+namespace Funky.Core
 {
-    public TypeName(string fullQualifiedTypeName)
+    public sealed class TypeName : IEquatable<TypeName>
     {
-        if (string.IsNullOrEmpty(fullQualifiedTypeName))
-            throw new ArgumentException($"'{nameof(fullQualifiedTypeName)}' cannot be null or empty", nameof(fullQualifiedTypeName));
+        public TypeName(string fullQualifiedTypeName)
+        {
+            if (string.IsNullOrEmpty(fullQualifiedTypeName))
+                throw new ArgumentException($"'{nameof(fullQualifiedTypeName)}' cannot be null or empty", nameof(fullQualifiedTypeName));
 
-        this.FullQualifiedName = fullQualifiedTypeName;    
-        var typeSperatorIndex = fullQualifiedTypeName.IndexOf(',');
-    
-        this.Name = fullQualifiedTypeName.Split('.')[^1];
-        this.FullName = fullQualifiedTypeName.Substring(0, typeSperatorIndex);
+            this.FullQualifiedName = fullQualifiedTypeName;
+            var typeSperatorIndex = fullQualifiedTypeName.IndexOf(',');
 
-        var assemblyNameStart = typeSperatorIndex + 1;
-        var assemblyNameString = fullQualifiedTypeName[assemblyNameStart..];
+            this.FullName = fullQualifiedTypeName.Substring(0, typeSperatorIndex);
+            this.Name = this.FullName.Split('.')[^1];
 
-        this.Assembly = new AssemblyName(assemblyNameString);
-    }
+            var assemblyNameStart = typeSperatorIndex + 1;
+            var assemblyNameString = fullQualifiedTypeName[assemblyNameStart..];
 
-    public string Name{ get; }
+            this.Assembly = new AssemblyName(assemblyNameString);
+        }
 
-    public string FullName { get; }
+        public string Name { get; }
 
-    public string FullQualifiedName { get; }
+        public string FullName { get; }
 
-    public AssemblyName Assembly { get; }
+        public string FullQualifiedName { get; }
 
-         public override bool Equals(object obj)
-            => obj is TypeName other
-            && this.FullName == other.FullName
-            && this.FullQualifiedName == other.FullQualifiedName
-            && this.Assembly == other.Assembly;
+        public AssemblyName Assembly { get; }
 
-        public override int GetHashCode() => HashCode.Combine(this.FullName, this.FullQualifiedName, this.Assembly);
+        public override bool Equals(object obj)
+            => this.Equals(obj as TypeName);
 
         public bool Equals(TypeName other)
-            => this.Equals(other);
+            => other != null
+            && this.Name == other.Name
+            && this.FullName == other.FullName
+            && this.FullQualifiedName == other.FullQualifiedName
+            && this.Assembly.ToString() == other.Assembly.ToString();
 
-        public override string ToString() => this.FullQualifiedName;
+        public override int GetHashCode()
+            => HashCode.Combine(this.Name, this.FullName, this.FullQualifiedName, this.Assembly);
+    }
 }

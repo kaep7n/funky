@@ -1,6 +1,4 @@
-﻿using Funky.Core;
-using Funky.Kafka;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
 namespace Funky.Bootstrapper.TestHost1
@@ -13,10 +11,10 @@ namespace Funky.Bootstrapper.TestHost1
                 .RunAsync();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseFunky(builder =>
-                {
-                    builder.UseKafka("sys1");
-                });
+            Host.CreateDefaultBuilder(args);
+                //.UseFunky(builder =>
+                //{
+                //    builder.UseKafka("sys1");
+                //});
     }
 }
