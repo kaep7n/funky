@@ -1,10 +1,11 @@
-﻿using Funky.Core.Messaging;
+﻿using Funky.Core.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 
 namespace Funky.Core
 {
@@ -40,10 +41,21 @@ namespace Funky.Core
 
             this.serviceProvider = services.BuildServiceProvider();
 
-            foreach (var topic in funkDef.Topics)
+            var sysEventsConsumer = this.consumerFactory.Create<SysEvent>("funky.sys");
+
+            Task.Run(async () =>
             {
-                this.consumers.Add(consumerFactory.Create(topic));
-            }
+                await foreach (var evt in sysEventsConsumer.ReadAllAsync()
+                    .ConfigureAwait(false))
+                {
+                    var funk = this.serviceProvider.GetService<IFunk>();
+
+                    await funk.ExecuteAsync()
+                        .ConfigureAwait(false);
+                }
+            });
+
+            this.consumers.Add(sysEventsConsumer);
         }
     }
 }

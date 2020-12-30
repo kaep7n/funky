@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Funky.Core
+namespace Funky.Core.Events
 {
     public interface IProducer<T>
     {
