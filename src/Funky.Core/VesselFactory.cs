@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Funky.Core.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Funky.Core
 {
@@ -14,7 +16,7 @@ namespace Funky.Core
             if (funkDef is null)
                 throw new ArgumentNullException(nameof(funkDef));
 
-            return new Vessel(funkDef);
+            return new Vessel(funkDef, serviceProvider.GetRequiredService<IConsumerFactory>());
         }
     }
 }

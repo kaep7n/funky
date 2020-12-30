@@ -43,7 +43,9 @@ namespace Funky.Core.Tests
             {
                 FunkDefs = new FunkDefOption[] { new FunkDefOption { Type = "Funky.Fakes.EmptyFunk, Funky.Fakes", Topics = new[] { "test1", "test2" } } }
             });
-            var vesselFactory = new VesselFactory(new FakeServiceProvider());
+            var consumer = new FakeConsumer();
+            var serviceProvider = new FakeServiceProvider(new FakeConsumerFactory(consumer));
+            var vesselFactory = new VesselFactory(serviceProvider);
 
             var service = new VesselControllerService(vesselFactory, optionsMonitor, this.logger);
 

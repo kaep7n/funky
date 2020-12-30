@@ -2,6 +2,6 @@
 {
     public interface IConsumerFactory
     {
-        IConsumer<T> Create<T>(string topic);
+        IConsumer Create(string topic);
     }
 }

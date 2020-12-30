@@ -1,6 +1,7 @@
 ﻿using Funky.Core.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -10,6 +11,7 @@ namespace Funky.Core
     public sealed class Vessel : IVessel
     {
         private readonly AssemblyLoadContext context = new DirectoryLoadContext(Directory.GetCurrentDirectory());
+        private readonly List<IConsumer> consumers = new();
         private readonly FunkDef funkDef;
         private readonly IConsumerFactory consumerFactory;
         private IServiceProvider serviceProvider;
@@ -37,6 +39,11 @@ namespace Funky.Core
             }
 
             this.serviceProvider = services.BuildServiceProvider();
+
+            foreach (var topic in funkDef.Topics)
+            {
+                this.consumers.Add(consumerFactory.Create(topic));
+            }
         }
     }
 }

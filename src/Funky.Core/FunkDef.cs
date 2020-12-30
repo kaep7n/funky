@@ -13,7 +13,6 @@ namespace Funky.Core
 
         public TypeName TypeName { get; }
 
-        public TypeName TypeName { get; }
         public IEnumerable<string> Topics { get; }
 
         public override bool Equals(object obj)
