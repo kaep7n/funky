@@ -1,4 +1,5 @@
 using Funky.Fakes;
+using System.Linq;
 using Xunit;
 
 namespace Funky.Core.Tests
@@ -10,7 +11,7 @@ namespace Funky.Core.Tests
         {
             var type = typeof(EmptyFunk);
             var expectedTypeName = new TypeName(type.AssemblyQualifiedName);
-            var actualDefinition = new FunkDef(type.AssemblyQualifiedName);
+            var actualDefinition = new FunkDef(type.AssemblyQualifiedName, Enumerable.Empty<string>());
 
             Assert.Equal(expectedTypeName, actualDefinition.TypeName);
         }

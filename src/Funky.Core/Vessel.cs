@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Loader;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Funky.Core
 {
@@ -13,29 +12,28 @@ namespace Funky.Core
         private readonly FunkDef funkDef;
         private IServiceProvider serviceProvider;
 
-        public Vessel(FunkDef funkDef) => this.funkDef = funkDef;
+        public Vessel(FunkDef funkDef)
+        {
+            this.funkDef = funkDef;
+        }
 
-        public Task StartAsync(CancellationToken cancellationToken = default)
+        public void Initialize()
         {
             var assembly = this.context.LoadFromAssemblyName(funkDef.TypeName.Assembly);
             var funkType = assembly.GetType(funkDef.TypeName.FullName);
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddTransient(typeof(IFunk), funkType);
+            var services = new ServiceCollection();
+            services.AddTransient(typeof(IFunk), funkType);
 
-            this.serviceProvider = serviceCollection.BuildServiceProvider();
+            var startupAttribute = funkType.GetCustomAttribute(typeof(StartupAttribute), true) as StartupAttribute;
 
-            return Task.CompletedTask;
+            if (startupAttribute is not null)
+            {
+                var startup = Activator.CreateInstance(startupAttribute.StartupType) as IStartup;
+                startup?.Configure(services);
+            }
+
+            this.serviceProvider = services.BuildServiceProvider();
         }
-
-        public async Task ConsumeAsync()
-        {
-            var funk = this.serviceProvider.GetRequiredService<IFunk>();
-
-            await funk.ExecuteAsync()
-                .ConfigureAwait(false);
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
     }
 }

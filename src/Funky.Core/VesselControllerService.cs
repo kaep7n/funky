@@ -10,51 +10,44 @@ namespace Funky.Core
 {
     public class VesselControllerService : IHostedService
     {
+        private readonly VesselFactory vesselFactory;
         private readonly IOptionsMonitor<VesselControllerServiceOptions> optionsMonitor;
         private readonly ILogger<VesselControllerService> logger;
-        private readonly List<Vessel> vessels = new ();
+        private readonly List<IVessel> vessels = new ();
 
-        public VesselControllerService(IOptionsMonitor<VesselControllerServiceOptions> optionsMonitor, ILogger<VesselControllerService> logger)
+        public VesselControllerService(VesselFactory vesselFactory, IOptionsMonitor<VesselControllerServiceOptions> optionsMonitor, ILogger<VesselControllerService> logger)
         {
+            this.vesselFactory = vesselFactory ?? throw new ArgumentNullException(nameof(vesselFactory));
             this.optionsMonitor = optionsMonitor ?? throw new ArgumentNullException(nameof(optionsMonitor));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public IEnumerable<IVessel> Vessels => this.vessels;
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
             this.logger.LogInformation("starting controller.");
 
             this.logger.LogDebug("reading configured funk definitions.");
-            foreach (var configuredDef in this.optionsMonitor.CurrentValue.FunkDefs)
+            foreach (var options in this.optionsMonitor.CurrentValue.FunkDefs)
             {
-                this.logger.LogDebug($"parsing funk definition '{configuredDef}'.");
-                var funkDef = new FunkDef(configuredDef);
+                this.logger.LogDebug($"parsing funk definition '{options}'.");
+                var funkDef = new FunkDef(options.Type, options.Topics);
 
                 this.logger.LogInformation($"creating vessel for funk definition '{funkDef}.");
-                var vessel = new Vessel(funkDef);
+                var vessel = this.vesselFactory.Create(funkDef);
 
                 this.logger.LogInformation($"starting vessel for funk definition '{funkDef}.");
-                await vessel.StartAsync(cancellationToken)
-                    .ConfigureAwait(false);
+                vessel.Initialize();
 
                 this.logger.LogDebug("adding vessel to controlled vessels.");
                 this.vessels.Add(vessel);
             }
 
             this.logger.LogInformation("controller started successfully.");
+            return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            foreach (var vessel in this.vessels)
-            {
-                this.logger.LogInformation("stopping vessel.");
-
-                await vessel.StopAsync(cancellationToken)
-                    .ConfigureAwait(false);
-            }
-        }
+        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }

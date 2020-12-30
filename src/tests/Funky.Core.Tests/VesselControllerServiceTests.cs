@@ -15,8 +15,9 @@ namespace Funky.Core.Tests
         public void Ctor_should_create_instance()
         {
             var optionsMonitor = new FakeOptionsMonitor<VesselControllerServiceOptions>(new VesselControllerServiceOptions());
-        
-            var service = new VesselControllerService(optionsMonitor, this.logger);
+            var vesselFactory = new VesselFactory(new FakeServiceProvider());
+
+            var service = new VesselControllerService(vesselFactory, optionsMonitor, this.logger);
 
             Assert.NotNull(service);
         }
@@ -25,8 +26,9 @@ namespace Funky.Core.Tests
         public async Task StartAsync_with_empty_options_should_start()
         {
             var optionsMonitor = new FakeOptionsMonitor<VesselControllerServiceOptions>(new VesselControllerServiceOptions());
-        
-            var service = new VesselControllerService(optionsMonitor, this.logger);
+            var vesselFactory = new VesselFactory(new FakeServiceProvider());
+
+            var service = new VesselControllerService(vesselFactory, optionsMonitor, this.logger);
 
             await service.StartAsync(CancellationToken.None)
                 .ConfigureAwait(false);
@@ -39,33 +41,16 @@ namespace Funky.Core.Tests
         {
             var optionsMonitor = new FakeOptionsMonitor<VesselControllerServiceOptions>(new VesselControllerServiceOptions
             {
-                FunkDefs = new [] { "Funky.Fakes.EmptyFunk, Funky.Fakes" }
+                FunkDefs = new FunkDefOption[] { new FunkDefOption { Type = "Funky.Fakes.EmptyFunk, Funky.Fakes", Topics = new[] { "test1", "test2" } } }
             });
-        
-            var service = new VesselControllerService(optionsMonitor, this.logger);
+            var vesselFactory = new VesselFactory(new FakeServiceProvider());
+
+            var service = new VesselControllerService(vesselFactory, optionsMonitor, this.logger);
 
             await service.StartAsync(CancellationToken.None)
                 .ConfigureAwait(false);
 
             Assert.Single(service.Vessels);
-        }
-
-        [Fact]
-        public async Task StartAsync_with_one_funk_without_dependencies_should_accept_message()
-        {
-            var optionsMonitor = new FakeOptionsMonitor<VesselControllerServiceOptions>(new VesselControllerServiceOptions
-            {
-                FunkDefs = new[] { "Funky.Fakes.EmptyFunk, Funky.Fakes" }
-            });
-
-            var service = new VesselControllerService(optionsMonitor, this.logger);
-
-            await service.StartAsync(CancellationToken.None)
-                .ConfigureAwait(false);
-
-            var vessel = Assert.Single(service.Vessels);
-
-            await vessel.ConsumeAsync();
         }
     }
 }

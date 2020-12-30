@@ -2,7 +2,7 @@
 
 namespace Funky.Core
 {
-    public interface IInitializer
+    public interface IStartup
     {
         void Configure(IServiceCollection services);
     }
