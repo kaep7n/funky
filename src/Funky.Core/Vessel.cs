@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Funky.Core.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Reflection;
@@ -10,11 +11,13 @@ namespace Funky.Core
     {
         private readonly AssemblyLoadContext context = new DirectoryLoadContext(Directory.GetCurrentDirectory());
         private readonly FunkDef funkDef;
+        private readonly IConsumerFactory consumerFactory;
         private IServiceProvider serviceProvider;
 
-        public Vessel(FunkDef funkDef)
+        public Vessel(FunkDef funkDef, IConsumerFactory consumerFactory)
         {
-            this.funkDef = funkDef;
+            this.funkDef = funkDef ?? throw new ArgumentNullException(nameof(funkDef));
+            this.consumerFactory = consumerFactory ?? throw new ArgumentNullException(nameof(consumerFactory));
         }
 
         public void Initialize()
