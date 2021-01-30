@@ -32,7 +32,7 @@ namespace Funky.Core
             foreach (var options in this.optionsMonitor.CurrentValue.FunkDefs)
             {
                 this.logger.LogDebug($"parsing funk definition '{options}'.");
-                var funkDef = new FunkDef(options.Type, options.Topics);
+                var funkDef = new FunkDef(options.Type, options.Topic);
 
                 this.logger.LogInformation($"creating vessel for funk definition '{funkDef}.");
                 var vessel = this.vesselFactory.Create(funkDef);

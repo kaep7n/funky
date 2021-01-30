@@ -12,11 +12,8 @@ namespace Funky.Core
             => this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
 
         public IVessel Create(FunkDef funkDef)
-        {
-            if (funkDef is null)
-                throw new ArgumentNullException(nameof(funkDef));
-
-            return new Vessel(funkDef, serviceProvider.GetRequiredService<IConsumerFactory>());
-        }
+            => funkDef is null
+                ? throw new ArgumentNullException(nameof(funkDef))
+                : new Vessel(funkDef, serviceProvider.GetRequiredService<IConsumerFactory>());
     }
 }

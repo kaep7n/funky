@@ -5,15 +5,18 @@ namespace Funky.Core
 {
     public class FunkDef
     {
-        public FunkDef(string fullQualifiedName, IEnumerable<string> topics)
+        public FunkDef(string fullQualifiedName, string topic)
         {
+            if (fullQualifiedName is null)
+                throw new ArgumentNullException(nameof(fullQualifiedName));
+
             this.TypeName = new TypeName(fullQualifiedName);
-            this.Topics = topics;
+            this.Topic = topic ?? throw new ArgumentNullException(nameof(topic));
         }
 
         public TypeName TypeName { get; }
 
-        public IEnumerable<string> Topics { get; }
+        public string Topic { get; }
 
         public override bool Equals(object obj)
             => obj is FunkDef def && EqualityComparer<TypeName>.Default.Equals(this.TypeName, def.TypeName);

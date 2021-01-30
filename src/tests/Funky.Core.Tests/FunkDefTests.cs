@@ -11,7 +11,7 @@ namespace Funky.Core.Tests
         {
             var type = typeof(EmptyFunk);
             var expectedTypeName = new TypeName(type.AssemblyQualifiedName);
-            var actualDefinition = new FunkDef(type.AssemblyQualifiedName, Enumerable.Empty<string>());
+            var actualDefinition = new FunkDef(type.AssemblyQualifiedName, "topic");
 
             Assert.Equal(expectedTypeName, actualDefinition.TypeName);
         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 
 namespace Funky.Core
 {
@@ -40,10 +41,26 @@ namespace Funky.Core
 
             this.serviceProvider = services.BuildServiceProvider();
 
-            foreach (var topic in funkDef.Topics)
+            var consumer = consumerFactory.Create(funkDef.Topic);
+
+            Task.Run(async () =>
             {
-                this.consumers.Add(consumerFactory.Create(topic));
-            }
+                await consumer.EnableAsync()
+                    .ConfigureAwait(false);
+
+                await foreach(var message in consumer.ReadAllAsync())
+                {
+                    var funk = this.serviceProvider.GetRequiredService<IFunk>();
+
+                    await funk.ExecuteAsync()
+                        .ConfigureAwait(false);
+                }
+
+                await consumer.DisableAsync()
+                    .ConfigureAwait(false);
+            });
+
+            this.consumers.Add(consumer);
         }
     }
 }
