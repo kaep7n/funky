@@ -1,4 +1,4 @@
-﻿using Funky.Core.Messaging;
+﻿using Funky.Core.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -41,13 +41,10 @@ namespace Funky.Core
 
             this.serviceProvider = services.BuildServiceProvider();
 
-            var consumer = consumerFactory.Create(funkDef.Topic);
+            var consumer = consumerFactory.Create<int>(funkDef.Topic);
 
             Task.Run(async () =>
             {
-                await consumer.EnableAsync()
-                    .ConfigureAwait(false);
-
                 await foreach(var message in consumer.ReadAllAsync())
                 {
                     var funk = this.serviceProvider.GetRequiredService<IFunk>();
@@ -55,9 +52,6 @@ namespace Funky.Core
                     await funk.ExecuteAsync()
                         .ConfigureAwait(false);
                 }
-
-                await consumer.DisableAsync()
-                    .ConfigureAwait(false);
             });
 
             this.consumers.Add(consumer);

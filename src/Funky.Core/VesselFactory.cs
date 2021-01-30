@@ -1,4 +1,4 @@
-﻿using Funky.Core.Messaging;
+﻿using Funky.Core.Events;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

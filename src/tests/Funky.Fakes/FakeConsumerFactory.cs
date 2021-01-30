@@ -1,36 +1,34 @@
-﻿using Funky.Core;
-using Funky.Core.Messaging;
-using System;
+﻿using Funky.Core.Events;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Channels;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Funky.Fakes
 {
     public class FakeConsumerFactory : IConsumerFactory
     {
-        private readonly FakeConsumer fakeConsumer;
+        private readonly List<IConsumer> consumers = new List<IConsumer>();
 
-        public FakeConsumerFactory(FakeConsumer fakeConsumer)
-            => this.fakeConsumer = fakeConsumer ?? throw new ArgumentNullException(nameof(fakeConsumer));
+        public IConsumer<T> Create<T>(string topic)
+        {
+            var consumer = new FakeConsumer<T>(topic);
 
-        public IConsumer Create(string topic) => fakeConsumer;
-    }
+            this.consumers.Add(consumer);
 
-    public class FakeConsumer : IConsumer
-    {
-        private readonly Channel<IMessage> messages = Channel.CreateUnbounded<IMessage>();
+            return consumer;
+        }
 
-        public Task DisableAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public async Task SendToTopicAsync<T>(string topic, T evt)
+        {
+           var consumersForTopic = this.consumers
+                .Where(c => c.Topic == topic)
+                .Cast<FakeConsumer<T>>();
 
-        public Task EnableAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-
-        public async Task SendAsync(IMessage message)
-            => await this.messages.Writer.WriteAsync(message)
-                .ConfigureAwait(false);
-
-        public IAsyncEnumerable<IMessage> ReadAllAsync(CancellationToken cancellationToken = default)
-            => this.messages.Reader.ReadAllAsync(cancellationToken);
+            foreach (var consumer in consumersForTopic)
+            {
+                await consumer.SendAsync(evt)
+                    .ConfigureAwait(false);
+            }
+        }
     }
 }

@@ -1,6 +1,9 @@
+using Funky.Core.Events;
 using Funky.Fakes;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -43,8 +46,8 @@ namespace Funky.Core.Tests
             {
                 FunkDefs = new FunkDefOption[] { new FunkDefOption { Type = "Funky.Fakes.EmptyFunk, Funky.Fakes", Topic = "test1" } }
             });
-            var consumer = new FakeConsumer();
-            var serviceProvider = new FakeServiceProvider(new FakeConsumerFactory(consumer));
+            
+            var serviceProvider = new FakeServiceProvider(new FakeConsumerFactory());
             var vesselFactory = new VesselFactory(serviceProvider);
 
             var service = new VesselControllerService(vesselFactory, optionsMonitor, this.logger);
@@ -53,6 +56,13 @@ namespace Funky.Core.Tests
                 .ConfigureAwait(false);
 
             Assert.Single(service.Vessels);
+
+            var evt = new SysEvent(Guid.NewGuid());
+
+            var consumerFactory = serviceProvider.GetService<FakeConsumerFactory>();
+
+            await consumerFactory.SendToTopicAsync("funky.sys", evt)
+                .ConfigureAwait(false);
         }
     }
 }
