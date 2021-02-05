@@ -11,7 +11,7 @@ namespace Funky.Playground.Kafka.Consumer
     {
         private static readonly string[] brokers = new[] { "localhost:9092", "localhost:9093", "localhost:9094" };
 
-        private readonly Channel<ConfigurationChanged> incoming = Channel.CreateUnbounded<ConfigurationChanged>();
+        private readonly Channel<HelloFromProcess> incoming = Channel.CreateUnbounded<HelloFromProcess>();
 
         public ValueTask StartAsync(CancellationToken cancellationToken = default)
         {
@@ -20,7 +20,8 @@ namespace Funky.Playground.Kafka.Consumer
             return new ValueTask();
         }
 
-        public IAsyncEnumerable<ConfigurationChanged> ReadAllAsync(CancellationToken cancellationToken = default) => this.incoming.Reader.ReadAllAsync(cancellationToken);
+        public IAsyncEnumerable<HelloFromProcess> ReadAllAsync(CancellationToken cancellationToken = default)
+            => this.incoming.Reader.ReadAllAsync(cancellationToken);
 
         private async Task ProcessAsync(CancellationToken cancellationToken = default)
         {
@@ -31,11 +32,12 @@ namespace Funky.Playground.Kafka.Consumer
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            var consumer = new ConsumerBuilder<string, ConfigurationChanged>(config)
+            var consumer = new ConsumerBuilder<string, HelloFromProcess>(config)
                .SetKeyDeserializer(Deserializers.Utf8)
-               .SetValueDeserializer(new JsonDeserializer<ConfigurationChanged>())
+               .SetValueDeserializer(new JsonDeserializer<HelloFromProcess>())
                .Build();
-            consumer.Subscribe(ConfigurationChanged.TOPIC);
+
+            consumer.Subscribe("hello-from-process");
 
             try
             {
@@ -48,7 +50,6 @@ namespace Funky.Playground.Kafka.Consumer
             }
             catch (OperationCanceledException)
             {
-                // Ensure the consumer leaves the group cleanly and final offsets are committed.
                 consumer.Close();
             }
         }

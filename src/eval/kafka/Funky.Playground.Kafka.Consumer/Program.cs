@@ -22,7 +22,7 @@ namespace Funky.Playground.Kafka.Consumer
 
             await foreach (var message in consumer.ReadAllAsync().ConfigureAwait(false))
             {
-                Console.WriteLine($"received {message.Configuration}");
+                Console.WriteLine($"received from process {message.ProcessId} created at {message.CreatedAtUtc}");
             }
 
             Console.WriteLine("waiting for messages", Color.Gray);

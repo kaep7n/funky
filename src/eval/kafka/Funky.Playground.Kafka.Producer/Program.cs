@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,29 +16,21 @@ namespace Funky.Playground.Kafka.Producer
         {
             Console.WriteLine("producer started", Color.Gray);
             
-            var input = string.Empty;
+            var count = 10000;
 
-            while (input != "exit")
-            {
-                Console.WriteLine("message count to send", Color.White);
+            Console.ReadLine();
 
-                if (int.TryParse(Console.ReadLine(), out var count) && count > 0)
-                {
-                    Console.WriteLine($"sending {count} messages", Color.Gray);
-                    SendMultipleMessages(count);
-                }
-                else
-                {
-                    Console.WriteLine("invalid input, starting over", Color.LightYellow);
-                }
-            }
+            Console.WriteLine("message count to send", Color.White);
+
+            Console.WriteLine($"sending {count} messages", Color.Gray);
+            SendMultipleMessages(count);
         }
 
         private static void SendMultipleMessages(int count)
         {
             var config = new ProducerConfig { BootstrapServers = string.Join(",", brokers) };
 
-            static void handler(DeliveryReport<string, ConfigurationChanged> deliveryReport)
+            static void handler(DeliveryReport<string, HelloFromProcess> deliveryReport)
             {
                 if (deliveryReport.Error.IsError)
                 {
@@ -49,17 +42,17 @@ namespace Funky.Playground.Kafka.Producer
                 }
             }
 
-            using var producer = new ProducerBuilder<string, ConfigurationChanged>(config)
+            using var producer = new ProducerBuilder<string, HelloFromProcess>(config)
                 .SetKeySerializer(Serializers.Utf8)
-                .SetValueSerializer(new JsonSerializer<ConfigurationChanged>())
+                .SetValueSerializer(new JsonSerializer<HelloFromProcess>())
                 .Build();
-            
+
             for (var i = 0; i < count; ++i)
             {
-                producer.Produce(ConfigurationChanged.TOPIC, new Message<string, ConfigurationChanged> 
+                producer.Produce("hello-from-process", new Message<string, HelloFromProcess> 
                 { 
                     Key = Guid.NewGuid().ToString(),
-                    Value = new ConfigurationChanged("test") 
+                    Value = new HelloFromProcess(Environment.ProcessId.ToString(), i + 1, DateTimeOffset.UtcNow) 
                 }, handler);
             }
 

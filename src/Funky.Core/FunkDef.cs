@@ -24,9 +24,9 @@ namespace Funky.Core
         public bool Equals(FunkDef other)
             => other != null
             && EqualityComparer<TypeName>.Default.Equals(this.TypeName, other.TypeName)
-            && EqualityComparer<IEnumerable<string>>.Default.Equals(this.Topics, other.Topics);
+            && this.Topic == other.Topic;
 
         public override int GetHashCode()
-            => HashCode.Combine(this.TypeName, this.Topics);
+            => HashCode.Combine(this.TypeName, this.Topic);
     }
 }

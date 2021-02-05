@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-using Funky.Core;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Funky.Events.Kafka
 {
-    public class KafkaProducer<T> : IProducer<T>, IDisposable
+    public class KafkaProducer<T> : IDisposable
     {
         private readonly IProducer<string, T> producer;
         private readonly string topic;

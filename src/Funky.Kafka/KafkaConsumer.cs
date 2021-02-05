@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Funky.Events.Kafka
 {
-    public class KafkaConsumer<T> : IConsumer<T>
+    public class KafkaConsumer<T>
     {
         private readonly IEnumerable<string> brokers;
         private readonly string topic;

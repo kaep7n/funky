@@ -52,7 +52,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Bootstrapper.TestHost3", "tests\Funky.Bootstrapper.TestHost3\Funky.Bootstrapper.TestHost3.csproj", "{25EA7479-35DB-4AD0-A7C2-81B4A34CA056}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Core.Tests", "tests\Funky.Core.Tests\Funky.Core.Tests.csproj", "{02315457-E473-4098-A142-7A469417F9DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Funky.Core.Tests", "tests\Funky.Core.Tests\Funky.Core.Tests.csproj", "{02315457-E473-4098-A142-7A469417F9DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dc", ".dc", "{53BC994C-5B0E-4C4B-B9E4-BAC418103948}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose\kafka.yml = ..\docker-compose\kafka.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
