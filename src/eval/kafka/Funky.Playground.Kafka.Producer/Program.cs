@@ -15,15 +15,15 @@ namespace Funky.Playground.Kafka.Producer
         public static void Main(string[] _)
         {
             Console.WriteLine("producer started", Color.Gray);
-            
+
             var count = 10000;
 
-            Console.ReadLine();
+            while (Console.ReadLine() != "exit")
+            {
+                Console.WriteLine($"sending {count} messages", Color.Gray);
+                SendMultipleMessages(count);
 
-            Console.WriteLine("message count to send", Color.White);
-
-            Console.WriteLine($"sending {count} messages", Color.Gray);
-            SendMultipleMessages(count);
+            }
         }
 
         private static void SendMultipleMessages(int count)
@@ -49,10 +49,10 @@ namespace Funky.Playground.Kafka.Producer
 
             for (var i = 0; i < count; ++i)
             {
-                producer.Produce("hello-from-process", new Message<string, HelloFromProcess> 
-                { 
+                producer.Produce("hello-from-process", new Message<string, HelloFromProcess>
+                {
                     Key = Guid.NewGuid().ToString(),
-                    Value = new HelloFromProcess(Environment.ProcessId.ToString(), i + 1, DateTimeOffset.UtcNow) 
+                    Value = new HelloFromProcess(Environment.ProcessId.ToString(), i + 1, DateTimeOffset.UtcNow)
                 }, handler);
             }
 

@@ -10,8 +10,8 @@ services:
         ZOO_PORT: 2181
         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
-      - /dev/zookeeper/zoo1/data:/data
-      - /dev/zookeeper/zoo1/datalog:/datalog
+      - zookeeper-1-data:/data
+      - zookeeper-1-datalog:/datalog
 
   zoo2:
     image: zookeeper:3.4.9
@@ -23,8 +23,8 @@ services:
         ZOO_PORT: 2182
         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
-      - /dev/zookeeper/zoo2/data:/data
-      - /dev/zookeeper/zoo2/datalog:/datalog
+      - zookeeper-2-data:/data
+      - zookeeper-2-datalog:/datalog
 
   zoo3:
     image: zookeeper:3.4.9
@@ -36,8 +36,8 @@ services:
         ZOO_PORT: 2183
         ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     volumes:
-      - /dev/zookeeper/zoo3/data:/data
-      - /dev/zookeeper/zoo3/datalog:/datalog
+      - zookeeper-3-data:/data
+      - zookeeper-3-datalog:/datalog
 
 
   kafka1:
@@ -53,7 +53,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - /dev/kafka/kafka1/data:/var/lib/kafka/data
+      - kafka-1-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
@@ -72,7 +72,7 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - /dev/kafka/kafka2/data:/var/lib/kafka/data
+      - kafka-2-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
@@ -91,8 +91,64 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
     volumes:
-      - /dev/kafka/kafka3/data:/var/lib/kafka/data
+      - kafka-3-data:/var/lib/kafka/data
     depends_on:
       - zoo1
       - zoo2
       - zoo3
+
+volumes:
+    kafka-1-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\kafka\kafka1\data'
+    kafka-2-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\kafka\kafka2\data'
+    kafka-3-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\kafka\kafka3\data'
+    zookeeper-1-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo1\data'
+    zookeeper-1-datalog:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo1\datalog'
+    zookeeper-2-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo2\data'
+    zookeeper-2-datalog:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo2\datalog'
+    zookeeper-3-data:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo3\data'
+    zookeeper-3-datalog:
+        driver: local
+        driver_opts:
+          type: 'none'
+          o: 'bind'
+          device: 'C:\dev\zookeeper\zoo3\datalog'

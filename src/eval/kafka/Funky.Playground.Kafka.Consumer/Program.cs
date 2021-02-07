@@ -10,7 +10,6 @@ namespace Funky.Playground.Kafka.Consumer
 {
     class Program
     {
-
         public static async Task Main(string[] _)
         {
             Console.WriteLine("consumer started", Color.Gray);
@@ -22,7 +21,7 @@ namespace Funky.Playground.Kafka.Consumer
 
             await foreach (var message in consumer.ReadAllAsync().ConfigureAwait(false))
             {
-                Console.WriteLine($"received from process {message.ProcessId} created at {message.CreatedAtUtc}");
+                Console.WriteLine($"received from process {message.ProcessId} with sequence {message.Sequence} created at {message.CreatedAtUtc}");
             }
 
             Console.WriteLine("waiting for messages", Color.Gray);

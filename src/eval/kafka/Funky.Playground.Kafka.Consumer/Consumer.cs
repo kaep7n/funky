@@ -27,7 +27,7 @@ namespace Funky.Playground.Kafka.Consumer
         {
             var config = new ConsumerConfig
             {
-                GroupId = "configuration-group",
+                GroupId = Environment.ProcessId.ToString(),
                 BootstrapServers = string.Join(",", brokers),
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };

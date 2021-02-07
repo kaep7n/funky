@@ -59,6 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".dc", ".dc", "{53BC994C-5B0
 		..\docker-compose\kafka.yml = ..\docker-compose\kafka.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funky.Playground.Prototype", "eval\Funky.Playground.Prototype\Funky.Playground.Prototype.csproj", "{CE854F32-3AC2-41CA-B56B-5D789C548D26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{02315457-E473-4098-A142-7A469417F9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02315457-E473-4098-A142-7A469417F9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02315457-E473-4098-A142-7A469417F9DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE854F32-3AC2-41CA-B56B-5D789C548D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE854F32-3AC2-41CA-B56B-5D789C548D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE854F32-3AC2-41CA-B56B-5D789C548D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE854F32-3AC2-41CA-B56B-5D789C548D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,6 +127,7 @@ Global
 		{126A6D71-5164-4AA6-BF0F-8DE27265A7B4} = {9808812B-87AA-43C3-8047-3386674C599E}
 		{25EA7479-35DB-4AD0-A7C2-81B4A34CA056} = {9808812B-87AA-43C3-8047-3386674C599E}
 		{02315457-E473-4098-A142-7A469417F9DF} = {9808812B-87AA-43C3-8047-3386674C599E}
+		{CE854F32-3AC2-41CA-B56B-5D789C548D26} = {D77A2B56-3FAE-4E0E-B238-C890E69A33B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B3BF6A1-5C1D-43BF-B441-B4A69CECAC31}
