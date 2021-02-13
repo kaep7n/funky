@@ -10,7 +10,10 @@ namespace Funky.Playground.Prototype
             => await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddHostedService<Manager>();
+                    services.AddFunk<LogCurrentTime>()
+                        .WithTimer(1000);
+
+                    services.AddHostedService<FunkTriggerService>();
                 })
                 .RunConsoleAsync();
     }
