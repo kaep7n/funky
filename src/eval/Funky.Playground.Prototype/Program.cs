@@ -10,10 +10,15 @@ namespace Funky.Playground.Prototype
             => await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddFunk<LogCurrentTime>()
-                        .WithTimer(1000);
+                    services.AddFunk<ForwardTimerFired>()
+                        .Subscribe()
+                        .Timer(1000);
 
-                    services.AddHostedService<FunkTriggerService>();
+                    services.AddFunk<ReceiveSomething>()
+                        .Subscribe()
+                        .Topic<TimerFiredForwarded>("forward");
+
+                    services.AddHostedService<SubscriptionObserver>();
                 })
                 .RunConsoleAsync();
     }

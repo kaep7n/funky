@@ -2,7 +2,7 @@
 
 namespace Funky.Playground.Prototype
 {
-    public interface IFunkTrigger
+    public interface ISubscription
     {
         ValueTask EnableAsync();
 

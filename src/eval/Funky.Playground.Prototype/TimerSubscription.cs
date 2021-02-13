@@ -5,16 +5,17 @@ using System.Timers;
 
 namespace Funky.Playground.Prototype
 {
-    public class TimerFunkTrigger<TFunk> : IFunkTrigger
-        where TFunk: class, IFunk
+    public class TimerSubscription : ISubscription
     {
+        private readonly IServiceScopeFactory serviceScopeFactory;
+        private readonly Type targetType;
         private readonly Timer timer;
-        private readonly IServiceProvider serviceProvider;
 
-        public TimerFunkTrigger(double interval, IServiceProvider serviceProvider)
+        public TimerSubscription(IServiceScopeFactory serviceScopeFactory, Type targetType, double interval)
         {
             this.timer = new Timer(interval);
-            this.serviceProvider = serviceProvider;
+            this.serviceScopeFactory = serviceScopeFactory;
+            this.targetType = targetType;
         }
 
         public ValueTask EnableAsync()
@@ -35,18 +36,12 @@ namespace Funky.Playground.Prototype
 
         private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            try
-            {
-                using var scope = this.serviceProvider.CreateScope();
+            using var scope = this.serviceScopeFactory.CreateScope();
 
-                var funk = scope.ServiceProvider.GetRequiredService<IFunk>();
+            if (scope.ServiceProvider.GetService(this.targetType) is not IFunk<TimerFired> funk)
+                return;
 
-                await funk.ExecuteAsync(new Noop());
-            }
-            catch(Exception exception)
-            {
-
-            }
+            await funk.ExecuteAsync(new TimerFired(DateTimeOffset.UtcNow));
         }
     }
 }
