@@ -14,7 +14,7 @@ namespace Funky.Playground.Prototype
                         .Subscribe()
                         .Timer(1000);
 
-                    services.AddFunk<ReceiveSomething>()
+                    services.AddFunk<ReceiveSomething1>()
                         .Subscribe()
                         .Topic<TimerFiredForwarded>("forward");
 
@@ -22,7 +22,7 @@ namespace Funky.Playground.Prototype
                         .Subscribe()
                         .Topic<TimerFiredForwarded>("forward");
 
-                    services.AddFunk<ReceiveSomething2>()
+                    services.AddFunk<ReceiveSomething3>()
                         .Subscribe()
                         .Topic<TimerFiredForwarded>("forward");
 
