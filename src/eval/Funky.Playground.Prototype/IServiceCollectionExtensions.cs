@@ -72,10 +72,10 @@ namespace Funky.Playground.Prototype
 
         public ISubscriptionBuilder Topic<TMessage>(string topic)
         {
-            services.AddTransient<QueueResolver>();
-            services.AddSingleton<IQueue>(p => new Queue<TMessage>(topic));
+            services.AddSingleton<QueueResolver>();
             services.AddSingleton<ISubscription>(
                 p => new TopicSubscription<TMessage>(
+                        p.GetRequiredService<QueueResolver>(),
                         p.GetRequiredService<IServiceScopeFactory>(),
                         funkType,
                         topic

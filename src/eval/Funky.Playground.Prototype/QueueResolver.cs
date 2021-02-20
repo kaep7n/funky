@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Funky.Playground.Prototype
 {
     public class QueueResolver
     {
-        private readonly IEnumerable<IQueue> queues;
+        private readonly Dictionary<string, IQueue> queues = new();
 
-        public QueueResolver(IEnumerable<IQueue> queues)
-            => this.queues = queues ?? throw new ArgumentNullException(nameof(queues));
+        public IQueue<TMessage> Resolve<TMessage>(string topic)
+        {
+            if (!this.queues.TryGetValue(topic, out var queue))
+            {
+                queue = new InMemeoryQueue<TMessage>();
+                this.queues.Add(topic, queue);
+            }
 
-        public Queue<TMessage> Resolve<TMessage>(string topic)
-            => this.queues.FirstOrDefault(q => q.Topic == topic) as Queue<TMessage>;
+            return queue.Unwrap<TMessage>();
+        }
     }
 }

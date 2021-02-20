@@ -7,13 +7,15 @@ namespace Funky.Playground.Prototype
 {
     public class TopicSubscription<TMessage> : ISubscription
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
+        private readonly QueueResolver queueResolver;
         private readonly IServiceScopeFactory serviceScopeFactory;
         private readonly Type targetType;
         private readonly string topic;
 
-        public TopicSubscription(IServiceScopeFactory serviceScopeFactory, Type targetType, string topic)
+        public TopicSubscription(QueueResolver queueResolver, IServiceScopeFactory serviceScopeFactory, Type targetType, string topic)
         {
+            this.queueResolver = queueResolver ?? throw new ArgumentNullException(nameof(queueResolver));
             this.serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
             this.targetType = targetType ?? throw new ArgumentNullException(nameof(targetType));
             this.topic = topic ?? throw new ArgumentNullException(nameof(topic));
@@ -21,9 +23,7 @@ namespace Funky.Playground.Prototype
 
         public ValueTask EnableAsync()
         {
-            var scope = this.serviceScopeFactory.CreateScope();
-            var resolver = scope.ServiceProvider.GetRequiredService<QueueResolver>();
-            var queue = resolver.Resolve<TMessage>(this.topic);
+            var queue = this.queueResolver.Resolve<TMessage>(this.topic);
 
             _ = Task.Run(async () =>
               {

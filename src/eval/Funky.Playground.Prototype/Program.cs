@@ -18,6 +18,14 @@ namespace Funky.Playground.Prototype
                         .Subscribe()
                         .Topic<TimerFiredForwarded>("forward");
 
+                    services.AddFunk<ReceiveSomething2>()
+                        .Subscribe()
+                        .Topic<TimerFiredForwarded>("forward");
+
+                    services.AddFunk<ReceiveSomething2>()
+                        .Subscribe()
+                        .Topic<TimerFiredForwarded>("forward");
+
                     services.AddHostedService<SubscriptionObserver>();
                 })
                 .RunConsoleAsync();
