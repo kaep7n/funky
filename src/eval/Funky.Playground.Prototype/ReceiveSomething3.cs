@@ -6,9 +6,9 @@ namespace Funky.Playground.Prototype
 {
     public class ReceiveSomething3 : IFunk<TimerFiredForwarded>
     {
-        private readonly ILogger<ReceiveSomething1> logger;
+        private readonly ILogger<ReceiveSomething3> logger;
 
-        public ReceiveSomething3(ILogger<ReceiveSomething1> logger)
+        public ReceiveSomething3(ILogger<ReceiveSomething3> logger)
             => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         public ValueTask ExecuteAsync(TimerFiredForwarded message)

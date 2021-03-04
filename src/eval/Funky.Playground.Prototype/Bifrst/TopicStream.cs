@@ -5,10 +5,6 @@ using System.Threading.Tasks;
 
 namespace Bifrst
 {
-    public record Message(Guid Id, long Offset, object Payload);
-
-    public record TopicOptions(int? Capacity);
-
     internal class TopicStream
     {
         private readonly Channel<Message> stream;
@@ -31,7 +27,7 @@ namespace Bifrst
 
         public string Key { get; }
 
-        internal IAsyncEnumerable<object> ReadAllAsync()
+        internal IAsyncEnumerable<Message> ReadAllAsync()
             => this.stream.Reader.ReadAllAsync();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Funky.Playground.Prototype.Bifrst;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
@@ -10,9 +11,11 @@ namespace Funky.Playground.Prototype
             => await Host.CreateDefaultBuilder()
                 .ConfigureServices(services =>
                 {
+                    services.AddSingleton<Bifröst>();
+
                     services.AddFunk<ForwardTimerFired>()
                         .Subscribe()
-                        .Timer(1000);
+                        .Timer(1);
 
                     services.AddFunk<ReceiveSomething1>()
                         .Subscribe()
@@ -20,11 +23,11 @@ namespace Funky.Playground.Prototype
 
                     services.AddFunk<ReceiveSomething2>()
                         .Subscribe()
-                        .Topic<TimerFiredForwarded>("forward");
+                        .Topic<TimerFiredForwarded>("forward", "group");
 
                     services.AddFunk<ReceiveSomething3>()
                         .Subscribe()
-                        .Topic<TimerFiredForwarded>("forward");
+                        .Topic<TimerFiredForwarded>("forward", "group");
 
                     services.AddHostedService<SubscriptionObserver>();
                 })

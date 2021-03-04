@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Funky.Playground.Prototype.Bifrst;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Funky.Playground.Prototype
@@ -27,15 +28,15 @@ namespace Funky.Playground.Prototype
             return this;
         }
 
-        public ISubscriptionBuilder Topic<TMessage>(string topic)
+        public ISubscriptionBuilder Topic<TMessage>(string topic, string group)
         {
-            services.AddSingleton<QueueResolver>();
             services.AddSingleton<ISubscription>(
                 p => new TopicSubscription<TMessage>(
-                        p.GetRequiredService<QueueResolver>(),
+                        p.GetRequiredService<Bifröst>(),
                         p.GetRequiredService<IServiceScopeFactory>(),
                         funkType,
-                        topic
+                        topic,
+                        group
                     )
                 );
 

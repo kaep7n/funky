@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace Funky.Playground.Prototype.Bifrst
@@ -13,10 +12,6 @@ namespace Funky.Playground.Prototype.Bifrst
     {
         private readonly ConcurrentDictionary<string, TopicStream> topicStreams = new();
         private readonly List<ISubscription> subscribers = new();
-
-        public Bifröst()
-        {
-        }
 
         public async ValueTask PublishAsync(string topic, object payload)
             => await this.PublishAsync(topic, payload, new TopicOptions(Capacity: null));
@@ -33,7 +28,24 @@ namespace Funky.Playground.Prototype.Bifrst
                     {
                         var subs = this.subscribers.Where(t => Regex.IsMatch(topicStream.Key, t.Pattern));
 
-                        foreach (var subGroup in subs.GroupBy(s => s.Group))
+                        var grouplessSubs = subs.Where(s => s.Group is null);
+
+                        foreach (var sub in grouplessSubs)
+                        {
+                            try
+                            {
+                                await sub.WriteAsync(message);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+
+                        var subGroups = subs
+                            .Where(s => s.Group is not null)
+                            .GroupBy(s => s.Group);
+
+                        foreach (var subGroup in subGroups)
                         {
                             foreach (var sub in subGroup)
                             {
@@ -69,31 +81,5 @@ namespace Funky.Playground.Prototype.Bifrst
 
             return ValueTask.CompletedTask;
         }
-    }
-
-    public interface ISubscription
-    {
-        public string Pattern { get; }
-
-        public string Group { get; }
-
-        ValueTask WriteAsync(object message);
-    }
-
-    public class Subscription : ISubscription
-    {
-        private readonly Channel<object> stream = Channel.CreateUnbounded<object>();
-
-        public Subscription(string pattern, string group)
-        {
-            this.Pattern = pattern;
-            this.Group = group;
-        }
-
-        public string Pattern { get; }
-
-        public string Group { get; }
-
-        public async ValueTask WriteAsync(object message) => await this.stream.Writer.WriteAsync(message);
     }
 }
