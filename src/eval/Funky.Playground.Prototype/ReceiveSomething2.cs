@@ -11,10 +11,11 @@ namespace Funky.Playground.Prototype
         public ReceiveSomething2(ILogger<ReceiveSomething2> logger)
             => this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
-        public ValueTask ExecuteAsync(TimerFiredForwarded message)
+        public async ValueTask ExecuteAsync(TimerFiredForwarded message)
         {
-            this.logger.LogInformation($"Received Forward: {message.FiredAt}");
-            return ValueTask.CompletedTask;
+            this.logger.LogInformation($"RECEIVER 2: Received Forward: {message.FiredAt}");
+            
+            await Task.Delay(8000);
         }
     }
 }

@@ -13,7 +13,8 @@ namespace Funky.Playground.Prototype
 
         public ValueTask ExecuteAsync(TimerFiredForwarded message)
         {
-            this.logger.LogInformation($"Received Forward: {message.FiredAt}");
+            this.logger.LogInformation($"RECEIVER 3: Received Forward: {message.FiredAt}");
+
             return ValueTask.CompletedTask;
         }
     }

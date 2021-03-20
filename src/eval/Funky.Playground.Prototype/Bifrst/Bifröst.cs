@@ -11,7 +11,7 @@ namespace Funky.Playground.Prototype.Bifrst
     public class Bifröst
     {
         private readonly ConcurrentDictionary<string, TopicStream> topicStreams = new();
-        private readonly List<ISubscription> subscribers = new();
+        private readonly List<IStreamSubscription> subscribers = new();
 
         public async ValueTask PublishAsync(string topic, object payload)
             => await this.PublishAsync(topic, payload, new TopicOptions(Capacity: null));
@@ -28,9 +28,7 @@ namespace Funky.Playground.Prototype.Bifrst
                     {
                         var subs = this.subscribers.Where(t => Regex.IsMatch(topicStream.Key, t.Pattern));
 
-                        var grouplessSubs = subs.Where(s => s.Group is null);
-
-                        foreach (var sub in grouplessSubs)
+                        foreach (var sub in subs)
                         {
                             try
                             {
@@ -38,25 +36,6 @@ namespace Funky.Playground.Prototype.Bifrst
                             }
                             catch (Exception)
                             {
-                            }
-                        }
-
-                        var subGroups = subs
-                            .Where(s => s.Group is not null)
-                            .GroupBy(s => s.Group);
-
-                        foreach (var subGroup in subGroups)
-                        {
-                            foreach (var sub in subGroup)
-                            {
-                                try
-                                {
-                                    await sub.WriteAsync(message);
-                                    break;
-                                }
-                                catch (Exception)
-                                {
-                                }
                             }
                         }
                     }
@@ -68,14 +47,14 @@ namespace Funky.Playground.Prototype.Bifrst
             await topicStream.WriteAsync(payload);
         }
 
-        public ValueTask SubscribeAsync(ISubscription subscription)
+        public ValueTask SubscribeAsync(IStreamSubscription subscription)
         {
             this.subscribers.Add(subscription);
 
             return ValueTask.CompletedTask;
         }
 
-        public ValueTask UnsubscribeAsync(ISubscription subscription)
+        public ValueTask UnsubscribeAsync(IStreamSubscription subscription)
         {
             this.subscribers.Remove(subscription);
 

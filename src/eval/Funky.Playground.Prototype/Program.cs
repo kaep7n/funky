@@ -1,6 +1,10 @@
 ﻿using Funky.Playground.Prototype.Bifrst;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Funky.Playground.Prototype
@@ -15,7 +19,7 @@ namespace Funky.Playground.Prototype
 
                     services.AddFunk<ForwardTimerFired>()
                         .Subscribe()
-                        .Timer(1);
+                        .Timer(1000);
 
                     services.AddFunk<ReceiveSomething1>()
                         .Subscribe()
@@ -23,11 +27,11 @@ namespace Funky.Playground.Prototype
 
                     services.AddFunk<ReceiveSomething2>()
                         .Subscribe()
-                        .Topic<TimerFiredForwarded>("forward", "group");
+                        .Topic<TimerFiredForwarded>("forward");
 
                     services.AddFunk<ReceiveSomething3>()
                         .Subscribe()
-                        .Topic<TimerFiredForwarded>("forward", "group");
+                        .Topic<TimerFiredForwarded>("forward");
 
                     services.AddHostedService<SubscriptionObserver>();
                 })

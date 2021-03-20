@@ -4,6 +4,6 @@
     {
         ISubscriptionBuilder Timer(double interval);
 
-        ISubscriptionBuilder Topic<TMessage>(string topic, string group = null);
+        ISubscriptionBuilder Topic<TMessage>(string topic);
     }
 }

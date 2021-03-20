@@ -28,15 +28,14 @@ namespace Funky.Playground.Prototype
             return this;
         }
 
-        public ISubscriptionBuilder Topic<TMessage>(string topic, string group)
+        public ISubscriptionBuilder Topic<TMessage>(string topic)
         {
             services.AddSingleton<ISubscription>(
                 p => new TopicSubscription<TMessage>(
                         p.GetRequiredService<Bifröst>(),
                         p.GetRequiredService<IServiceScopeFactory>(),
                         funkType,
-                        topic,
-                        group
+                        topic
                     )
                 );
 

@@ -6,20 +6,21 @@ using System.Threading.Tasks;
 
 namespace Funky.Playground.Prototype
 {
-    public class TopicSubscription<TMessage> : ISubscription
+    public sealed class TopicSubscription<TMessage> : ISubscription, IDisposable
     {
+        private readonly SemaphoreSlim semaphore = new(0, 8);
         private readonly CancellationTokenSource cancellationTokenSource = new();
         private readonly Bifröst bifröst;
         private readonly IServiceScopeFactory serviceScopeFactory;
         private readonly Type targetType;
-        private readonly Subscription subscription;
+        private readonly StreamSubscription subscription;
 
-        public TopicSubscription(Bifröst bifröst, IServiceScopeFactory serviceScopeFactory, Type targetType, string topic, string group)
+        public TopicSubscription(Bifröst bifröst, IServiceScopeFactory serviceScopeFactory, Type targetType, string topic)
         {
             this.bifröst = bifröst ?? throw new ArgumentNullException(nameof(bifröst));
             this.serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
             this.targetType = targetType ?? throw new ArgumentNullException(nameof(targetType));
-            this.subscription = new Subscription(topic, group);
+            this.subscription = new StreamSubscription(topic);
         }
 
         public async ValueTask EnableAsync()
@@ -28,16 +29,24 @@ namespace Funky.Playground.Prototype
 
             _ = Task.Run(async () =>
               {
+                  this.semaphore.Release(8);
+
                   await foreach (var message in this.subscription.ReadAllAsync()
                         .WithCancellation(this.cancellationTokenSource.Token))
                   {
+                      await this.semaphore.WaitAsync();
+
                       using var scope = this.serviceScopeFactory.CreateScope();
 
                       if (scope.ServiceProvider.GetService(this.targetType) is not IFunk<TMessage> funk)
                           return;
 
                       if (message.Payload is TMessage payload)
-                          await funk.ExecuteAsync(payload);
+                      {
+                          _ = funk.ExecuteAsync(payload)
+                            .AsTask()
+                            .ContinueWith((_) => this.semaphore.Release());
+                      }
                   }
               }, this.cancellationTokenSource.Token);
         }
@@ -47,5 +56,7 @@ namespace Funky.Playground.Prototype
             this.cancellationTokenSource.Cancel();
             await this.bifröst.UnsubscribeAsync(subscription);
         }
+
+        public void Dispose() => this.semaphore.Dispose();
     }
 }
