@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Funky.Playground.ProtoActor
@@ -19,15 +18,11 @@ namespace Funky.Playground.ProtoActor
 
             var httpClient = new HttpClient();
 
-            var response = await httpClient.GetFromJsonAsync<JsonElement>("http://192.168.2.101:2121/device");
-            var links = response
-                .GetProperty("~links")
-                .GetRawText()
-                .Deserialize<IEnumerable<Link>>();
+            var response = await httpClient.GetFromJsonAsync<DeviceQueryResult>("http://192.168.2.101:2121/device");
 
-            foreach (var link in links)
+            foreach (var link in response.Links)
             {
-                if (link.Href == "..")
+                if (link.IsParentRef)
                     continue;
 
                 var device = await httpClient.GetFromJsonAsync<DeviceInformation>($"http://192.168.2.101:2121/{link.Rel}/{link.Href}");
