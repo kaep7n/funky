@@ -18,7 +18,7 @@ namespace Funky.Playground.ProtoActor
 
         public DeviceController()
         {
-            Console.WriteLine("device controller created", Color.LightGreen);
+            Console.WriteLine("device controller created", Color.LightSkyBlue);
         }
 
         public async Task ReceiveAsync(IContext context)
@@ -42,9 +42,10 @@ namespace Funky.Playground.ProtoActor
                     this.devices.Add(link.Href, pid);
                 }
             }
-            if(context.Message is DeviceData data)
+            if(context.Message is DeviceData msg)
             {
-                context.Forward(this.devices[data.Device]);
+                Console.WriteLine($"forwarding device data to {msg.Device}", Color.LightSkyBlue);
+                context.Forward(this.devices[msg.Device]);
             }
         }
     }

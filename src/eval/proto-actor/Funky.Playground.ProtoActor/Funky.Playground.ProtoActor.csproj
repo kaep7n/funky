@@ -7,9 +7,19 @@
 
   <ItemGroup>
     <PackageReference Include="Colorful.Console" Version="1.2.15" />
-    <PackageReference Include="Proto.Actor" Version="0.18.1-alpha.0.18" />
-	<PackageReference Include="MQTTnet" Version="3.0.15" />
-	<PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.15" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Proto.Actor" Version="0.18.1-alpha.0.19" />
+    <PackageReference Include="MQTTnet" Version="3.0.15" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="3.0.15" />
+    <PackageReference Include="Proto.Cluster" Version="0.18.1-alpha.0.19" />
+    <PackageReference Include="Proto.OpenTracing" Version="0.18.1-alpha.0.19" />
+    <PackageReference Include="Proto.Persistence" Version="0.18.1-alpha.0.19" />
+    <PackageReference Include="Proto.Router" Version="0.1.15" />
+    <PackageReference Include="Proto.Schedulers.SimpleScheduler" Version="0.2.1-alpha.0.27" />
   </ItemGroup>
 
 </Project>

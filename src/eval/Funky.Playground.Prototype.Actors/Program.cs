@@ -15,10 +15,6 @@ namespace Funky.Playground.Prototype.Actors
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddProtoActor(props =>
-                    {
-                    });
-
                     services.AddHostedService<Worker>();
                 });
     }
