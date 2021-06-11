@@ -4,7 +4,7 @@ namespace Funky.Playground.ProtoActor
 {
     public static class JsonSerializerExtensions
     {
-        private static readonly JsonSerializerOptions defaultSerializerSettings = new JsonSerializerOptions
+        public static readonly JsonSerializerOptions defaultSerializerSettings = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase

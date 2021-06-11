@@ -1,9 +1,14 @@
-﻿using Proto;
+﻿using Funky.Playground.ProtoActor.Homematic;
+using MQTTnet;
+using MQTTnet.Client.Options;
+using MQTTnet.Extensions.ManagedClient;
+using Proto;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Funky.Playground.ProtoActor
@@ -12,25 +17,47 @@ namespace Funky.Playground.ProtoActor
     {
         static async Task Main(string[] args)
         {
-            var dictionary = new Dictionary<string, PID>();
-
             var system = new ActorSystem();
 
-            var httpClient = new HttpClient();
+            var props = Props.FromProducer(() => new HomematicRoot());
+            var pid = system.Root.Spawn(props);
 
-            var response = await httpClient.GetFromJsonAsync<DeviceQueryResult>("http://192.168.2.101:2121/device");
+            var options = new ManagedMqttClientOptionsBuilder()
+                .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
+                .WithClientOptions(new MqttClientOptionsBuilder()
+                    .WithClientId("funky")
+                    .WithTcpServer("192.168.2.101")
+                    .Build())
+                .Build();
 
-            foreach (var link in response.Links)
+            var mqttClient = new MqttFactory().CreateManagedMqttClient();
+            await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
+                .WithTopic("#")
+                .Build());
+
+            mqttClient.UseDisconnectedHandler(e =>
             {
-                if (link.IsParentRef)
-                    continue;
+                Console.WriteLine("disconnected", Color.MediumVioletRed);
+            });
 
-                var device = await httpClient.GetFromJsonAsync<DeviceInformation>($"http://192.168.2.101:2121/{link.Rel}/{link.Href}");
+            mqttClient.UseConnectedHandler(e =>
+            {
+                Console.WriteLine("connected", Color.LightGreen);
+            });
 
-                var props = Props.FromProducer(() => new Device(device));
-                var pid = system.Root.Spawn(props);
-                dictionary.Add(link.Href, pid);
-            }
+            mqttClient.UseApplicationMessageReceivedHandler(e =>
+            {
+                var topicPaths = e.ApplicationMessage.Topic.Split("/");
+
+                if(topicPaths.Length > 2)
+                {
+                    var device = topicPaths[2];
+
+                    system.Root.Send(pid, new DeviceData(device, e.ApplicationMessage.Payload));
+                }
+            });
+
+            await mqttClient.StartAsync(options);
 
             Console.ReadLine();
         }

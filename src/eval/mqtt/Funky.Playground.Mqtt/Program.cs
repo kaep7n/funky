@@ -24,11 +24,11 @@ namespace Funky.Playground.Mqtt
 
             var mqttClient = new MqttFactory().CreateManagedMqttClient();
             await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
-                .WithTopic("device/status/+/1/HUMIDITY")
+                .WithTopic("#")
                 .Build());
-            await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
-                .WithTopic("device/status/+/1/TEMPERATURE")
-                .Build());
+            //await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
+            //    .WithTopic("device/status/+/1/TEMPERATURE")
+            //    .Build());
             await mqttClient.StartAsync(options);
 
             mqttClient.UseDisconnectedHandler(e =>
