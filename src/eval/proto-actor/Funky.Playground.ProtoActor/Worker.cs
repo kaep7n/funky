@@ -32,8 +32,7 @@ namespace Funky.Playground.Prototype.Actors
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             this.persistorGroup = this.actorSystem.Root.Spawn(
-                //this.actorSystem.DI().PropsFor<PersistorGroup>()
-                Props.FromProducer(() => new PersistorGroup())
+                this.actorSystem.DI().PropsFor<PersistorGroup>()
             );
             this.homaticRoot = this.actorSystem.Root.Spawn(
                 this.actorSystem.DI().PropsFor<HomaticRoot>()

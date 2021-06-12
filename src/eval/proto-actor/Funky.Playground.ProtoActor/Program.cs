@@ -30,6 +30,9 @@ namespace Funky.Playground.ProtoActor
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton(serviceProvider => new ActorSystem().WithServiceProvider(serviceProvider));
+                    services.AddTransient<HomaticRoot>();
+                    services.AddTransient<PersistorGroup>();
+
                     services.AddHostedService<Worker>();
                 });
     }
