@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Funky.Playground.ProtoActor.Homematic
+namespace Funky.Playground.ProtoActor
 {
     public record DeviceInformation
     {

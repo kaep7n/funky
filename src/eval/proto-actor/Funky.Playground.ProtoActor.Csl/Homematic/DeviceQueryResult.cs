@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Funky.Playground.ProtoActor.Homematic
+namespace Funky.Playground.ProtoActor
 {
     public record DeviceQueryResult
     {

@@ -1,4 +1,4 @@
-﻿namespace Funky.Playground.ProtoActor.Homematic
+﻿namespace Funky.Playground.ProtoActor
 {
     public record Link(string Rel, string Href, string Title)
     {

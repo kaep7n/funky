@@ -1,3 +1,4 @@
+using Funky.Playground.ProtoActor;
 using Funky.Playground.ProtoActor.Homematic;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,11 +8,13 @@ using MQTTnet.Extensions.ManagedClient;
 using Proto;
 using Proto.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Funky.Playground.ProtoActor
+namespace Funky.Playground.Prototype.Actors
 {
     public class Worker : IHostedService
     {
